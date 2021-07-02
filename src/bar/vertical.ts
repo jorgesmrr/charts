@@ -1,11 +1,6 @@
-import { IChartInternalOptions } from "./models.js";
+import { IPainterTask } from "../models";
 
-type Drawer = (
-  ctx: CanvasRenderingContext2D,
-  options: IChartInternalOptions
-) => void;
-
-const drawSteps: Drawer = (
+const paintSteps: IPainterTask = (
   ctx,
   { areas: { valuesStepsArea, valuesArea }, valuesSteps, maxValue, valueMapper }
 ) => {
@@ -20,11 +15,11 @@ const drawSteps: Drawer = (
     ctx.lineTo(valuesArea.x + valuesArea.width, y);
     ctx.stroke();
 
-    ctx.fillText(value + "", valuesStepsArea.x, y);
+    ctx.fillText(Math.floor(value) + "", valuesStepsArea.x, y);
   });
 };
 
-const drawLabels: Drawer = (ctx, { areas: { labelsArea }, labels }) => {
+const paintLabels: IPainterTask = (ctx, { areas: { labelsArea }, labels }) => {
   const slotWidth = labelsArea.width / labels.length;
 
   labels.forEach((label, index) => {
@@ -37,7 +32,7 @@ const drawLabels: Drawer = (ctx, { areas: { labelsArea }, labels }) => {
   });
 };
 
-const drawBars: Drawer = (
+const paintValues: IPainterTask = (
   ctx,
   { areas: { valuesArea }, values, valueMapper }
 ) => {
@@ -55,17 +50,8 @@ const drawBars: Drawer = (
   });
 };
 
-export const draw: (
-  rootElement: HTMLElement,
-  options: IChartInternalOptions
-) => void = (rootElement, options) => {
-  rootElement.innerHTML = `<canvas id="canvas" width="${options.width}" height="${options.height}" style="${options.style}" />`;
-
-  const canvas = document.getElementById("canvas") as HTMLCanvasElement;
-  const ctx = canvas.getContext("2d") as CanvasRenderingContext2D;
-  ctx.font = "16px sans-serif";
-
-  drawSteps(ctx, options);
-  drawLabels(ctx, options);
-  drawBars(ctx, options);
+export const verticalBarPainter = {
+  paintSteps,
+  paintLabels,
+  paintValues,
 };

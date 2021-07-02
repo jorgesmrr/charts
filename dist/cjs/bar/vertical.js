@@ -5,8 +5,8 @@ var __spreadArray = (this && this.__spreadArray) || function (to, from) {
     return to;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.draw = void 0;
-var drawSteps = function (ctx, _a) {
+exports.verticalBarPainter = void 0;
+var paintSteps = function (ctx, _a) {
     var _b = _a.areas, valuesStepsArea = _b.valuesStepsArea, valuesArea = _b.valuesArea, valuesSteps = _a.valuesSteps, maxValue = _a.maxValue, valueMapper = _a.valueMapper;
     __spreadArray([], new Array(valuesSteps + 1)).forEach(function (_, index) {
         var value = index * (maxValue / valuesSteps);
@@ -17,10 +17,10 @@ var drawSteps = function (ctx, _a) {
         ctx.moveTo(valuesArea.x, y);
         ctx.lineTo(valuesArea.x + valuesArea.width, y);
         ctx.stroke();
-        ctx.fillText(value + "", valuesStepsArea.x, y);
+        ctx.fillText(Math.floor(value) + "", valuesStepsArea.x, y);
     });
 };
-var drawLabels = function (ctx, _a) {
+var paintLabels = function (ctx, _a) {
     var labelsArea = _a.areas.labelsArea, labels = _a.labels;
     var slotWidth = labelsArea.width / labels.length;
     labels.forEach(function (label, index) {
@@ -30,7 +30,7 @@ var drawLabels = function (ctx, _a) {
         ctx.fillText(label, centeredX, labelsArea.y + labelsArea.height);
     });
 };
-var drawBars = function (ctx, _a) {
+var paintValues = function (ctx, _a) {
     var valuesArea = _a.areas.valuesArea, values = _a.values, valueMapper = _a.valueMapper;
     var slotWidth = valuesArea.width / values.length;
     values.forEach(function (value, index) {
@@ -43,13 +43,8 @@ var drawBars = function (ctx, _a) {
         ctx.stroke();
     });
 };
-var draw = function (rootElement, options) {
-    rootElement.innerHTML = "<canvas id=\"canvas\" width=\"" + options.width + "\" height=\"" + options.height + "\" style=\"" + options.style + "\" />";
-    var canvas = document.getElementById("canvas");
-    var ctx = canvas.getContext("2d");
-    ctx.font = "16px sans-serif";
-    drawSteps(ctx, options);
-    drawLabels(ctx, options);
-    drawBars(ctx, options);
+exports.verticalBarPainter = {
+    paintSteps: paintSteps,
+    paintLabels: paintLabels,
+    paintValues: paintValues,
 };
-exports.draw = draw;

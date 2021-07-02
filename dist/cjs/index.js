@@ -1,14 +1,14 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var drawings_js_1 = require("./drawings.js");
-var options_js_1 = require("./options.js");
-var chart = function (rootElement, options) {
-    if (!options)
-        throw Error("You must provide the options!");
-    if (!options.labels)
-        throw Error("You must provide the labels!");
-    if (!options.values)
-        throw Error("You must provide the values!");
-    drawings_js_1.draw(rootElement, options_js_1.setupOptions(options));
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __exportStar = (this && this.__exportStar) || function(m, exports) {
+    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
-exports.default = chart;
+Object.defineProperty(exports, "__esModule", { value: true });
+__exportStar(require("./bar/vertical.js"), exports);
+__exportStar(require("./core/chart.js"), exports);

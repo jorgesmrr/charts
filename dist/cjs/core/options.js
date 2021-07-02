@@ -1,10 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.setupOptions = void 0;
+exports.handleOptions = void 0;
 var VALUES_STEPS_AREA_WIDTH = 50;
 var LABELS_AREA_HEIGHT = 50;
-var setupOptions = function (_a) {
-    var labels = _a.labels, values = _a.values, _b = _a.valuesSteps, valuesSteps = _b === void 0 ? 3 : _b, _c = _a.width, width = _c === void 0 ? 500 : _c, _d = _a.height, height = _d === void 0 ? 500 : _d, _e = _a.margin, margin = _e === void 0 ? 50 : _e, _f = _a.barWidth, barWidth = _f === void 0 ? 20 : _f, _g = _a.style, style = _g === void 0 ? "" : _g;
+var handleOptions = function (_a) {
+    var labels = _a.labels, values = _a.values, _b = _a.valuesSteps, valuesSteps = _b === void 0 ? 3 : _b, width = _a.width, height = _a.height, _c = _a.margin, margin = _c === void 0 ? 50 : _c, _d = _a.barWidth, barWidth = _d === void 0 ? 20 : _d, _e = _a.style, style = _e === void 0 ? "" : _e;
     var chartArea = {
         x: margin,
         y: margin,
@@ -48,4 +48,4 @@ var setupOptions = function (_a) {
         valueMapper: valueMapper,
     };
 };
-exports.setupOptions = setupOptions;
+exports.handleOptions = handleOptions;
