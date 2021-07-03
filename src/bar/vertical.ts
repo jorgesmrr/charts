@@ -1,12 +1,17 @@
-import { IPainterTask } from "../models";
+import { ChartPainterTask } from "../models";
 
-const paintSteps: IPainterTask = (
+const paintSteps: ChartPainterTask = (
   ctx,
-  { areas: { valuesStepsArea, valuesArea }, valuesSteps, maxValue, valueMapper }
+  {
+    areas: { left: valuesStepsArea, values: valuesArea },
+    valuesSteps,
+    maxValue,
+    valueMapperY,
+  }
 ) => {
   [...new Array(valuesSteps + 1)].forEach((_, index) => {
     const value = index * (maxValue / valuesSteps);
-    const y = valueMapper(value);
+    const y = valueMapperY(value);
 
     ctx.strokeStyle = "grey";
     ctx.lineWidth = 1;
@@ -19,7 +24,10 @@ const paintSteps: IPainterTask = (
   });
 };
 
-const paintLabels: IPainterTask = (ctx, { areas: { labelsArea }, labels }) => {
+const paintLabels: ChartPainterTask = (
+  ctx,
+  { areas: { bottom: labelsArea }, labels }
+) => {
   const slotWidth = labelsArea.width / labels.length;
 
   labels.forEach((label, index) => {
@@ -32,9 +40,9 @@ const paintLabels: IPainterTask = (ctx, { areas: { labelsArea }, labels }) => {
   });
 };
 
-const paintValues: IPainterTask = (
+const paintValues: ChartPainterTask = (
   ctx,
-  { areas: { valuesArea }, values, valueMapper }
+  { areas: { values: valuesArea }, values, valueMapperY }
 ) => {
   const slotWidth = valuesArea.width / values.length;
 
@@ -44,7 +52,7 @@ const paintValues: IPainterTask = (
     ctx.strokeStyle = "black";
     ctx.lineWidth = 15;
     ctx.beginPath();
-    ctx.moveTo(x, valueMapper(value));
+    ctx.moveTo(x, valueMapperY(value));
     ctx.lineTo(x, valuesArea.y + valuesArea.height);
     ctx.stroke();
   });

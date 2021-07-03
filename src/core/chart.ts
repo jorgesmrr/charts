@@ -1,10 +1,10 @@
-import { IPainter, IOptions, IChart } from "../models.js";
+import { ChartPainter, ChartOptions, Chart } from "../models.js";
 import { handleOptions } from "./options.js";
 
 const update = (
-  painter: IPainter,
+  painter: ChartPainter,
   ctx: CanvasRenderingContext2D,
-  options: IOptions
+  options: ChartOptions
 ) => {
   const finalOptions = handleOptions(options);
   painter.paintSteps(ctx, finalOptions);
@@ -14,9 +14,9 @@ const update = (
 
 export const paintChart: (
   rootElement: HTMLElement,
-  painter: IPainter,
-  options: IOptions
-) => IChart = (rootElement, painter, options) => {
+  painter: ChartPainter,
+  options: ChartOptions
+) => Chart = (rootElement, painter, options) => {
   if (!options) throw Error("You must provide the options!");
   if (!options.labels) throw Error("You must provide the labels!");
   if (!options.values) throw Error("You must provide the values!");

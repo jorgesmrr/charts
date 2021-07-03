@@ -1,9 +1,9 @@
-import { IInternalOptions, IOptions } from "./../models";
+import { ChartInternalOptions, ChartOptions } from "./../models";
 
 const VALUES_STEPS_AREA_WIDTH = 50;
 const LABELS_AREA_HEIGHT = 50;
 
-export const handleOptions: (options: IOptions) => IInternalOptions = ({
+export const handleOptions: (options: ChartOptions) => ChartInternalOptions = ({
   labels,
   values,
   valuesSteps = 3,
@@ -20,25 +20,25 @@ export const handleOptions: (options: IOptions) => IInternalOptions = ({
     height: height - 2 * margin,
   };
 
-  const labelsArea = {
+  const bottom = {
     x: chartArea.x + VALUES_STEPS_AREA_WIDTH,
     y: chartArea.y + chartArea.height - LABELS_AREA_HEIGHT,
     width: chartArea.width - VALUES_STEPS_AREA_WIDTH,
     height: LABELS_AREA_HEIGHT,
   };
 
-  const valuesStepsArea = {
+  const left = {
     x: chartArea.x,
     y: chartArea.y,
     width: VALUES_STEPS_AREA_WIDTH,
-    height: chartArea.height - labelsArea.height,
+    height: chartArea.height - bottom.height,
   };
 
   const valuesArea = {
-    x: valuesStepsArea.x + valuesStepsArea.width,
+    x: left.x + left.width,
     y: chartArea.y,
-    width: chartArea.width - valuesStepsArea.width,
-    height: chartArea.height - labelsArea.height,
+    width: chartArea.width - left.width,
+    height: chartArea.height - bottom.height,
   };
 
   const maxValue = values.reduce(
@@ -46,7 +46,12 @@ export const handleOptions: (options: IOptions) => IInternalOptions = ({
     values[0]
   );
 
-  const valueMapper = (value: number) => {
+  const valueMapperX = (value: number) => {
+    const valuesRatio = maxValue / valuesArea.width;
+    return valuesArea.x + value / valuesRatio;
+  };
+
+  const valueMapperY = (value: number) => {
     const valuesRatio = maxValue / valuesArea.height;
     return valuesArea.y + valuesArea.height - value / valuesRatio;
   };
@@ -61,7 +66,8 @@ export const handleOptions: (options: IOptions) => IInternalOptions = ({
     margin,
     barWidth,
     style,
-    areas: { chartArea, labelsArea, valuesStepsArea, valuesArea },
-    valueMapper,
+    areas: { chart: chartArea, bottom, left, values: valuesArea },
+    valueMapperX,
+    valueMapperY,
   };
 };

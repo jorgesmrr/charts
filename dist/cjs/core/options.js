@@ -11,26 +11,30 @@ var handleOptions = function (_a) {
         width: width - 2 * margin,
         height: height - 2 * margin,
     };
-    var labelsArea = {
+    var bottom = {
         x: chartArea.x + VALUES_STEPS_AREA_WIDTH,
         y: chartArea.y + chartArea.height - LABELS_AREA_HEIGHT,
         width: chartArea.width - VALUES_STEPS_AREA_WIDTH,
         height: LABELS_AREA_HEIGHT,
     };
-    var valuesStepsArea = {
+    var left = {
         x: chartArea.x,
         y: chartArea.y,
         width: VALUES_STEPS_AREA_WIDTH,
-        height: chartArea.height - labelsArea.height,
+        height: chartArea.height - bottom.height,
     };
     var valuesArea = {
-        x: valuesStepsArea.x + valuesStepsArea.width,
+        x: left.x + left.width,
         y: chartArea.y,
-        width: chartArea.width - valuesStepsArea.width,
-        height: chartArea.height - labelsArea.height,
+        width: chartArea.width - left.width,
+        height: chartArea.height - bottom.height,
     };
     var maxValue = values.reduce(function (current, acc) { return (current > acc ? current : acc); }, values[0]);
-    var valueMapper = function (value) {
+    var valueMapperX = function (value) {
+        var valuesRatio = maxValue / valuesArea.width;
+        return valuesArea.x + value / valuesRatio;
+    };
+    var valueMapperY = function (value) {
         var valuesRatio = maxValue / valuesArea.height;
         return valuesArea.y + valuesArea.height - value / valuesRatio;
     };
@@ -44,8 +48,9 @@ var handleOptions = function (_a) {
         margin: margin,
         barWidth: barWidth,
         style: style,
-        areas: { chartArea: chartArea, labelsArea: labelsArea, valuesStepsArea: valuesStepsArea, valuesArea: valuesArea },
-        valueMapper: valueMapper,
+        areas: { chart: chartArea, bottom: bottom, left: left, values: valuesArea },
+        valueMapperX: valueMapperX,
+        valueMapperY: valueMapperY,
     };
 };
 exports.handleOptions = handleOptions;

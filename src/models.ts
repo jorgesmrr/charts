@@ -1,7 +1,7 @@
-export interface IChart {
+export interface Chart {
   update: (values: number[], labels: string[]) => void;
 }
-export interface IOptions {
+export interface ChartOptions {
   labels: string[];
   values: number[];
   valuesSteps?: number;
@@ -12,7 +12,7 @@ export interface IOptions {
   style?: string;
 }
 
-export interface IInternalOptions {
+export interface ChartInternalOptions {
   labels: string[];
   values: number[];
   maxValue: number;
@@ -23,28 +23,29 @@ export interface IInternalOptions {
   barWidth: number;
   style: string;
   areas: {
-    chartArea: IArea;
-    labelsArea: IArea;
-    valuesStepsArea: IArea;
-    valuesArea: IArea;
+    chart: ChartArea;
+    bottom: ChartArea;
+    left: ChartArea;
+    values: ChartArea;
   };
-  valueMapper: (value: number) => number;
+  valueMapperX: (value: number) => number;
+  valueMapperY: (value: number) => number;
 }
 
-export interface IArea {
+export interface ChartArea {
   x: number;
   y: number;
   width: number;
   height: number;
 }
 
-export type IPainterTask = (
+export type ChartPainterTask = (
   ctx: CanvasRenderingContext2D,
-  options: IInternalOptions
+  options: ChartInternalOptions
 ) => void;
 
-export interface IPainter {
-  paintSteps: IPainterTask;
-  paintLabels: IPainterTask;
-  paintValues: IPainterTask;
+export interface ChartPainter {
+  paintSteps: ChartPainterTask;
+  paintLabels: ChartPainterTask;
+  paintValues: ChartPainterTask;
 }

@@ -1,5 +1,5 @@
 import { ChartPainterTask } from "../models";
-export declare const verticalBarPainter: {
+export declare const horizontalBarPainter: {
     paintSteps: ChartPainterTask;
     paintLabels: ChartPainterTask;
     paintValues: ChartPainterTask;

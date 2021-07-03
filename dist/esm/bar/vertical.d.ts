@@ -1,6 +1,6 @@
-import { IPainterTask } from "../models";
+import { ChartPainterTask } from "../models";
 export declare const verticalBarPainter: {
-    paintSteps: IPainterTask;
-    paintLabels: IPainterTask;
-    paintValues: IPainterTask;
+    paintSteps: ChartPainterTask;
+    paintLabels: ChartPainterTask;
+    paintValues: ChartPainterTask;
 };

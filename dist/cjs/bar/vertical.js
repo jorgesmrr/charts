@@ -7,10 +7,10 @@ var __spreadArray = (this && this.__spreadArray) || function (to, from) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.verticalBarPainter = void 0;
 var paintSteps = function (ctx, _a) {
-    var _b = _a.areas, valuesStepsArea = _b.valuesStepsArea, valuesArea = _b.valuesArea, valuesSteps = _a.valuesSteps, maxValue = _a.maxValue, valueMapper = _a.valueMapper;
+    var _b = _a.areas, valuesStepsArea = _b.left, valuesArea = _b.values, valuesSteps = _a.valuesSteps, maxValue = _a.maxValue, valueMapperY = _a.valueMapperY;
     __spreadArray([], new Array(valuesSteps + 1)).forEach(function (_, index) {
         var value = index * (maxValue / valuesSteps);
-        var y = valueMapper(value);
+        var y = valueMapperY(value);
         ctx.strokeStyle = "grey";
         ctx.lineWidth = 1;
         ctx.beginPath();
@@ -21,7 +21,7 @@ var paintSteps = function (ctx, _a) {
     });
 };
 var paintLabels = function (ctx, _a) {
-    var labelsArea = _a.areas.labelsArea, labels = _a.labels;
+    var labelsArea = _a.areas.bottom, labels = _a.labels;
     var slotWidth = labelsArea.width / labels.length;
     labels.forEach(function (label, index) {
         var textDimensions = ctx.measureText(label);
@@ -31,14 +31,14 @@ var paintLabels = function (ctx, _a) {
     });
 };
 var paintValues = function (ctx, _a) {
-    var valuesArea = _a.areas.valuesArea, values = _a.values, valueMapper = _a.valueMapper;
+    var valuesArea = _a.areas.values, values = _a.values, valueMapperY = _a.valueMapperY;
     var slotWidth = valuesArea.width / values.length;
     values.forEach(function (value, index) {
         var x = valuesArea.x + index * slotWidth + slotWidth / 2;
         ctx.strokeStyle = "black";
         ctx.lineWidth = 15;
         ctx.beginPath();
-        ctx.moveTo(x, valueMapper(value));
+        ctx.moveTo(x, valueMapperY(value));
         ctx.lineTo(x, valuesArea.y + valuesArea.height);
         ctx.stroke();
     });

@@ -1,2 +1,2 @@
-import { IPainter, IOptions, IChart } from "../models.js";
-export declare const paintChart: (rootElement: HTMLElement, painter: IPainter, options: IOptions) => IChart;
+import { ChartPainter, ChartOptions, Chart } from "../models.js";
+export declare const paintChart: (rootElement: HTMLElement, painter: ChartPainter, options: ChartOptions) => Chart;

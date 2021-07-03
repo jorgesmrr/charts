@@ -1,14 +1,67 @@
 <html encoding="UTF-8">
   <base href="." />
-  <head></head>
+  <head>
+    <title>Live Demo - @jorgemoreira/charts</title>
+    <link rel="stylesheet" href="index.css" />
+  </head>
   <body>
     <div class="container">
-      <div id="chart"></div>
-      <div>
-        <button id="increment-btn-a">Add 10 to A</button>
-        <button id="increment-btn-b">Add 10 to B</button>
-        <button id="increment-btn-c">Add 10 to C</button>
-      </div>
+      <div id="chart" class="chart-wrapper"></div>
+      <form>
+        <fieldset>
+          <legend>Chart type</legend>
+          <label>
+            <input
+              type="radio"
+              name="chart-type"
+              id="vertical-bars-radio"
+              value="vertical-bars"
+              checked
+            />
+            Vertical Bars
+          </label>
+          <label>
+            <input
+              type="radio"
+              name="chart-type"
+              id="horizontal-bars-radio"
+              value="horizontal-bars"
+            />
+            Horizontal Bars
+          </label>
+        </fieldset>
+
+        <fieldset>
+          <legend>Chart values</legend>
+
+          <div>
+            <label
+              >A:
+              <input type="text" id="value-input-a" />
+            </label>
+            <button id="decrement-btn-a" type="button">-10</button>
+            <button id="increment-btn-a" type="button">+10</button>
+          </div>
+
+          <div>
+            <label
+              >B:
+              <input type="number" id="value-input-b" />
+            </label>
+            <button id="decrement-btn-b" type="button">-10</button>
+            <button id="increment-btn-b" type="button">+10</button>
+          </div>
+
+          <div>
+            <label
+              >C:
+              <input type="number" id="value-input-c" />
+            </label>
+            <button id="decrement-btn-c" type="button">-10</button>
+            <button id="increment-btn-c" type="button">+10</button>
+          </div>
+        </fieldset>
+      </form>
     </div>
 
     <script type="module" src="index.js"></script>

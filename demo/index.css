@@ -1,0 +1,9 @@
+.container {
+  display: flex;
+  gap: 1rem;
+}
+
+.chart-wrapper {
+  width: 700px;
+  height: 500px;
+}
