@@ -9,20 +9,26 @@ var __assign = (this && this.__assign) || function () {
     };
     return __assign.apply(this, arguments);
 };
+var _a;
+import { horizontalBarPainter } from "../bar/horizontal.js";
+import { verticalBarPainter } from "../bar/vertical.js";
 import { handleOptions } from "./options.js";
-var update = function (painter, ctx, options) {
+var painterByTypeMap = (_a = {},
+    _a["horizontal-bars"] = horizontalBarPainter,
+    _a["vertical-bars"] = verticalBarPainter,
+    _a);
+var update = function (ctx, options) {
+    var painter = painterByTypeMap[options.type];
     var finalOptions = handleOptions(options);
     painter.paintSteps(ctx, finalOptions);
     painter.paintLabels(ctx, finalOptions);
     painter.paintValues(ctx, finalOptions);
 };
-export var paintChart = function (rootElement, painter, options) {
+export var paintChart = function (rootElement, options) {
     if (!options)
         throw Error("You must provide the options!");
-    if (!options.labels)
-        throw Error("You must provide the labels!");
-    if (!options.values)
-        throw Error("You must provide the values!");
+    if (!options.data)
+        throw Error("You must provide the data!");
     if (!options.width)
         throw Error("You must provide the width!");
     if (!options.height)
@@ -31,10 +37,10 @@ export var paintChart = function (rootElement, painter, options) {
     var canvas = document.getElementById("canvas");
     var ctx = canvas.getContext("2d");
     ctx.font = "16px sans-serif";
-    update(painter, ctx, options);
-    var wrappedUpdate = function (values, labels) {
+    update(ctx, options);
+    var wrappedUpdate = function (data) {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-        update(painter, ctx, __assign(__assign({}, options), { values: values, labels: labels }));
+        update(ctx, __assign(__assign({}, options), { data: data }));
     };
     return {
         update: wrappedUpdate,

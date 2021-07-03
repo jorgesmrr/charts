@@ -1,7 +1,7 @@
 var VALUES_STEPS_AREA_WIDTH = 50;
 var LABELS_AREA_HEIGHT = 50;
 export var handleOptions = function (_a) {
-    var labels = _a.labels, values = _a.values, _b = _a.valuesSteps, valuesSteps = _b === void 0 ? 3 : _b, width = _a.width, height = _a.height, _c = _a.margin, margin = _c === void 0 ? 50 : _c, _d = _a.barWidth, barWidth = _d === void 0 ? 20 : _d, _e = _a.style, style = _e === void 0 ? "" : _e;
+    var data = _a.data, _b = _a.valuesSteps, valuesSteps = _b === void 0 ? 3 : _b, width = _a.width, height = _a.height, _c = _a.margin, margin = _c === void 0 ? 50 : _c, _d = _a.barWidth, barWidth = _d === void 0 ? 20 : _d, _e = _a.style, style = _e === void 0 ? "" : _e;
     var chartArea = {
         x: margin,
         y: margin,
@@ -26,7 +26,9 @@ export var handleOptions = function (_a) {
         width: chartArea.width - left.width,
         height: chartArea.height - bottom.height,
     };
-    var maxValue = values.reduce(function (current, acc) { return (current > acc ? current : acc); }, values[0]);
+    var maxValue = data.reduce(function (previous, current) {
+        return current.value > previous ? current.value : previous;
+    }, data[0].value);
     var valueMapperX = function (value) {
         var valuesRatio = maxValue / valuesArea.width;
         return valuesArea.x + value / valuesRatio;
@@ -36,8 +38,7 @@ export var handleOptions = function (_a) {
         return valuesArea.y + valuesArea.height - value / valuesRatio;
     };
     return {
-        labels: labels,
-        values: values,
+        data: data,
         maxValue: maxValue,
         valuesSteps: valuesSteps,
         width: width,

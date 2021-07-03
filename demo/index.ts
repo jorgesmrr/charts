@@ -1,26 +1,23 @@
-import {
-  Chart,
-  paintChart,
-  verticalBarPainter,
-  horizontalBarPainter,
-  ChartPainter,
-} from "./../dist/esm/index.js";
+import { Chart, paintChart, ChartType } from "./../dist/esm/index.js";
 
 let chart: Chart;
 
-const showChart = (painter: ChartPainter) =>
-  (chart = paintChart(root, painter, {
-    labels,
-    values,
+const root = document.getElementById("chart") as HTMLElement;
+
+const data = [
+  { label: "A", value: 100 },
+  { label: "B", value: 200 },
+  { label: "C", value: 300 },
+];
+
+const showChart = (type: ChartType) =>
+  (chart = paintChart(root, {
+    type,
+    data,
     width: 700,
     height: 500,
     style: "border: 1px solid black",
   }));
-
-const root = document.getElementById("chart") as HTMLElement;
-
-const values = [100, 200, 300];
-const labels = ["A", "B", "C"];
 
 const valueInputA = document.getElementById(
   "value-input-a"
@@ -44,36 +41,36 @@ const decrementBtnB = document.getElementById("decrement-btn-b");
 const decrementBtnC = document.getElementById("decrement-btn-c");
 
 const getChartTypeChangeHandler =
-  (painter: ChartPainter) =>
+  (type: ChartType) =>
   ({ target }: Event) => {
     if ((target as HTMLInputElement).checked) {
-      showChart(painter);
+      showChart(type);
     }
   };
 
 const getIncrementHandler =
   (index: number, input: HTMLInputElement, increment = 10) =>
   () => {
-    values[index] += increment;
+    data[index].value += increment;
 
-    input.value = values[index].toString();
-    chart.update(values, labels);
+    input.value = data[index].value.toString();
+    chart.update(data);
   };
 
 const getValueChangeHandler =
   (index: number) =>
   ({ target }: Event) => {
-    values[index] = Number((target as HTMLInputElement).value);
-    chart.update(values, labels);
+    data[index].value = Number((target as HTMLInputElement).value);
+    chart.update(data);
   };
 
 horizontalBarsRadio?.addEventListener(
   "change",
-  getChartTypeChangeHandler(horizontalBarPainter)
+  getChartTypeChangeHandler("horizontal-bars")
 );
 verticalBarsRadio?.addEventListener(
   "change",
-  getChartTypeChangeHandler(verticalBarPainter)
+  getChartTypeChangeHandler("vertical-bars")
 );
 
 valueInputA.addEventListener("input", getValueChangeHandler(0));
@@ -97,8 +94,8 @@ decrementBtnC?.addEventListener(
   getIncrementHandler(2, valueInputC, -10)
 );
 
-valueInputA.value = values[0].toString();
-valueInputB.value = values[1].toString();
-valueInputC.value = values[2].toString();
+valueInputA.value = data[0].value.toString();
+valueInputB.value = data[1].value.toString();
+valueInputC.value = data[2].value.toString();
 
-showChart(verticalBarPainter);
+showChart("vertical-bars");

@@ -4,8 +4,7 @@ const VALUES_STEPS_AREA_WIDTH = 50;
 const LABELS_AREA_HEIGHT = 50;
 
 export const handleOptions: (options: ChartOptions) => ChartInternalOptions = ({
-  labels,
-  values,
+  data,
   valuesSteps = 3,
   width,
   height,
@@ -41,9 +40,10 @@ export const handleOptions: (options: ChartOptions) => ChartInternalOptions = ({
     height: chartArea.height - bottom.height,
   };
 
-  const maxValue = values.reduce(
-    (current, acc) => (current > acc ? current : acc),
-    values[0]
+  const maxValue = data.reduce(
+    (previous, current) =>
+      current.value > previous ? current.value : previous,
+    data[0].value
   );
 
   const valueMapperX = (value: number) => {
@@ -57,8 +57,7 @@ export const handleOptions: (options: ChartOptions) => ChartInternalOptions = ({
   };
 
   return {
-    labels,
-    values,
+    data,
     maxValue,
     valuesSteps,
     width,

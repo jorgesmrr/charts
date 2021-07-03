@@ -18,9 +18,11 @@ var paintSteps = function (ctx, _a) {
     });
 };
 var paintLabels = function (ctx, _a) {
-    var labelsArea = _a.areas.bottom, labels = _a.labels;
-    var slotWidth = labelsArea.width / labels.length;
-    labels.forEach(function (label, index) {
+    var labelsArea = _a.areas.bottom, data = _a.data;
+    var slotWidth = labelsArea.width / data.length;
+    data
+        .map(function (record) { return record.label; })
+        .forEach(function (label, index) {
         var textDimensions = ctx.measureText(label);
         var originX = labelsArea.x + index * slotWidth + slotWidth / 2;
         var centeredX = originX - textDimensions.width / 2;
@@ -28,9 +30,11 @@ var paintLabels = function (ctx, _a) {
     });
 };
 var paintValues = function (ctx, _a) {
-    var valuesArea = _a.areas.values, values = _a.values, valueMapperY = _a.valueMapperY;
-    var slotWidth = valuesArea.width / values.length;
-    values.forEach(function (value, index) {
+    var valuesArea = _a.areas.values, data = _a.data, valueMapperY = _a.valueMapperY;
+    var slotWidth = valuesArea.width / data.length;
+    data
+        .map(function (record) { return record.value; })
+        .forEach(function (value, index) {
         var x = valuesArea.x + index * slotWidth + slotWidth / 2;
         ctx.strokeStyle = "black";
         ctx.lineWidth = 15;

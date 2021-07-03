@@ -26,36 +26,40 @@ const paintSteps: ChartPainterTask = (
 
 const paintLabels: ChartPainterTask = (
   ctx,
-  { areas: { bottom: labelsArea }, labels }
+  { areas: { bottom: labelsArea }, data }
 ) => {
-  const slotWidth = labelsArea.width / labels.length;
+  const slotWidth = labelsArea.width / data.length;
 
-  labels.forEach((label, index) => {
-    const textDimensions = ctx.measureText(label);
+  data
+    .map((record) => record.label)
+    .forEach((label, index) => {
+      const textDimensions = ctx.measureText(label);
 
-    const originX = labelsArea.x + index * slotWidth + slotWidth / 2;
-    const centeredX = originX - textDimensions.width / 2;
+      const originX = labelsArea.x + index * slotWidth + slotWidth / 2;
+      const centeredX = originX - textDimensions.width / 2;
 
-    ctx.fillText(label, centeredX, labelsArea.y + labelsArea.height);
-  });
+      ctx.fillText(label, centeredX, labelsArea.y + labelsArea.height);
+    });
 };
 
 const paintValues: ChartPainterTask = (
   ctx,
-  { areas: { values: valuesArea }, values, valueMapperY }
+  { areas: { values: valuesArea }, data, valueMapperY }
 ) => {
-  const slotWidth = valuesArea.width / values.length;
+  const slotWidth = valuesArea.width / data.length;
 
-  values.forEach((value, index) => {
-    const x = valuesArea.x + index * slotWidth + slotWidth / 2;
+  data
+    .map((record) => record.value)
+    .forEach((value, index) => {
+      const x = valuesArea.x + index * slotWidth + slotWidth / 2;
 
-    ctx.strokeStyle = "black";
-    ctx.lineWidth = 15;
-    ctx.beginPath();
-    ctx.moveTo(x, valueMapperY(value));
-    ctx.lineTo(x, valuesArea.y + valuesArea.height);
-    ctx.stroke();
-  });
+      ctx.strokeStyle = "black";
+      ctx.lineWidth = 15;
+      ctx.beginPath();
+      ctx.moveTo(x, valueMapperY(value));
+      ctx.lineTo(x, valuesArea.y + valuesArea.height);
+      ctx.stroke();
+    });
 };
 
 export const verticalBarPainter = {

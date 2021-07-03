@@ -1,12 +1,17 @@
-import { ChartPainter, ChartOptions, Chart } from "../models.js";
+import { horizontalBarPainter } from "../bar/horizontal.js";
+import { verticalBarPainter } from "../bar/vertical.js";
+import { ChartPainter, ChartOptions, Chart, ChartData } from "../models.js";
 import { handleOptions } from "./options.js";
 
-const update = (
-  painter: ChartPainter,
-  ctx: CanvasRenderingContext2D,
-  options: ChartOptions
-) => {
+const painterByTypeMap = {
+  ["horizontal-bars"]: horizontalBarPainter,
+  ["vertical-bars"]: verticalBarPainter,
+};
+
+const update = (ctx: CanvasRenderingContext2D, options: ChartOptions) => {
+  const painter = painterByTypeMap[options.type];
   const finalOptions = handleOptions(options);
+
   painter.paintSteps(ctx, finalOptions);
   painter.paintLabels(ctx, finalOptions);
   painter.paintValues(ctx, finalOptions);
@@ -14,12 +19,10 @@ const update = (
 
 export const paintChart: (
   rootElement: HTMLElement,
-  painter: ChartPainter,
   options: ChartOptions
-) => Chart = (rootElement, painter, options) => {
+) => Chart = (rootElement, options) => {
   if (!options) throw Error("You must provide the options!");
-  if (!options.labels) throw Error("You must provide the labels!");
-  if (!options.values) throw Error("You must provide the values!");
+  if (!options.data) throw Error("You must provide the data!");
   if (!options.width) throw Error("You must provide the width!");
   if (!options.height) throw Error("You must provide the height!");
 
@@ -29,11 +32,11 @@ export const paintChart: (
   const ctx = canvas.getContext("2d") as CanvasRenderingContext2D;
   ctx.font = "16px sans-serif";
 
-  update(painter, ctx, options);
+  update(ctx, options);
 
-  const wrappedUpdate = (values: number[], labels: string[]) => {
+  const wrappedUpdate = (data: ChartData[]) => {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    update(painter, ctx, { ...options, values, labels });
+    update(ctx, { ...options, data });
   };
 
   return {

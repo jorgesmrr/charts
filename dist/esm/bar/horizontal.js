@@ -18,17 +18,21 @@ var paintSteps = function (ctx, _a) {
     });
 };
 var paintLabels = function (ctx, _a) {
-    var labelsArea = _a.areas.left, labels = _a.labels;
-    var slotHeight = labelsArea.height / labels.length;
-    labels.forEach(function (label, index) {
+    var labelsArea = _a.areas.left, data = _a.data;
+    var slotHeight = labelsArea.height / data.length;
+    data
+        .map(function (record) { return record.label; })
+        .forEach(function (label, index) {
         var y = labelsArea.x + index * slotHeight + slotHeight / 2;
         ctx.fillText(label, labelsArea.x, y);
     });
 };
 var paintValues = function (ctx, _a) {
-    var valuesArea = _a.areas.values, values = _a.values, valueMapperX = _a.valueMapperX;
-    var slotHeight = valuesArea.height / values.length;
-    values.forEach(function (value, index) {
+    var valuesArea = _a.areas.values, data = _a.data, valueMapperX = _a.valueMapperX;
+    var slotHeight = valuesArea.height / data.length;
+    data
+        .map(function (record) { return record.value; })
+        .forEach(function (value, index) {
         var y = valuesArea.y + index * slotHeight + slotHeight / 2;
         ctx.strokeStyle = "black";
         ctx.lineWidth = 15;

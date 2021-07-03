@@ -1,9 +1,14 @@
 export interface Chart {
-    update: (values: number[], labels: string[]) => void;
+    update: (data: ChartData[]) => void;
+}
+export declare type ChartType = "horizontal-bars" | "vertical-bars";
+export interface ChartData {
+    label: string;
+    value: number;
 }
 export interface ChartOptions {
-    labels: string[];
-    values: number[];
+    type: ChartType;
+    data: ChartData[];
     valuesSteps?: number;
     width: number;
     height: number;
@@ -12,8 +17,7 @@ export interface ChartOptions {
     style?: string;
 }
 export interface ChartInternalOptions {
-    labels: string[];
-    values: number[];
+    data: ChartData[];
     maxValue: number;
     valuesSteps: number;
     width: number;
