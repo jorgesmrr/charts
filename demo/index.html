@@ -33,34 +33,12 @@
 
         <fieldset>
           <legend>Chart values</legend>
-
-          <div>
-            <label
-              >A:
-              <input type="text" id="value-input-a" />
-            </label>
-            <button id="decrement-btn-a" type="button">-10</button>
-            <button id="increment-btn-a" type="button">+10</button>
-          </div>
-
-          <div>
-            <label
-              >B:
-              <input type="number" id="value-input-b" />
-            </label>
-            <button id="decrement-btn-b" type="button">-10</button>
-            <button id="increment-btn-b" type="button">+10</button>
-          </div>
-
-          <div>
-            <label
-              >C:
-              <input type="number" id="value-input-c" />
-            </label>
-            <button id="decrement-btn-c" type="button">-10</button>
-            <button id="increment-btn-c" type="button">+10</button>
-          </div>
+          <div id="values-container"></div>
         </fieldset>
+
+        <div>
+          <button type="button" id="add-data-btn">Add data</button>
+        </div>
       </form>
     </div>
 
