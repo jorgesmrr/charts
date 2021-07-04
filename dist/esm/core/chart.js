@@ -33,7 +33,7 @@ export var paintChart = function (rootElement, options) {
         throw Error("You must provide the width!");
     if (!options.height)
         throw Error("You must provide the height!");
-    rootElement.innerHTML = "<canvas id=\"canvas\" width=\"" + options.width + "\" height=\"" + options.height + "\" style=\"" + options.style + "\" />";
+    rootElement.innerHTML = "<canvas id=\"canvas\" width=\"" + options.width + "\" height=\"" + options.height + "\" />";
     var canvas = document.getElementById("canvas");
     var ctx = canvas.getContext("2d");
     ctx.font = "16px sans-serif";

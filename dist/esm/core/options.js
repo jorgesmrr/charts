@@ -1,12 +1,13 @@
+var MARGIN = 50;
 var VALUES_STEPS_AREA_WIDTH = 50;
 var LABELS_AREA_HEIGHT = 50;
 export var handleOptions = function (_a) {
-    var data = _a.data, _b = _a.valuesSteps, valuesSteps = _b === void 0 ? 3 : _b, width = _a.width, height = _a.height, _c = _a.margin, margin = _c === void 0 ? 50 : _c, _d = _a.barWidth, barWidth = _d === void 0 ? 20 : _d, _e = _a.style, style = _e === void 0 ? "" : _e;
+    var type = _a.type, data = _a.data, width = _a.width, height = _a.height, _b = _a.gridLines, gridLines = _b === void 0 ? 3 : _b;
     var chartArea = {
-        x: margin,
-        y: margin,
-        width: width - 2 * margin,
-        height: height - 2 * margin,
+        x: MARGIN,
+        y: MARGIN,
+        width: width - 2 * MARGIN,
+        height: height - 2 * MARGIN,
     };
     var bottom = {
         x: chartArea.x + VALUES_STEPS_AREA_WIDTH,
@@ -38,14 +39,12 @@ export var handleOptions = function (_a) {
         return valuesArea.y + valuesArea.height - value / valuesRatio;
     };
     return {
+        type: type,
         data: data,
-        maxValue: maxValue,
-        valuesSteps: valuesSteps,
         width: width,
         height: height,
-        margin: margin,
-        barWidth: barWidth,
-        style: style,
+        gridLines: gridLines,
+        maxValue: maxValue,
         areas: { chart: chartArea, bottom: bottom, left: left, values: valuesArea },
         valueMapperX: valueMapperX,
         valueMapperY: valueMapperY,

@@ -7,9 +7,9 @@ var __spreadArray = (this && this.__spreadArray) || function (to, from) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.horizontalBarPainter = void 0;
 var paintSteps = function (ctx, _a) {
-    var _b = _a.areas, valuesStepsArea = _b.bottom, valuesArea = _b.values, valuesSteps = _a.valuesSteps, maxValue = _a.maxValue, valueMapperX = _a.valueMapperX;
-    __spreadArray([], new Array(valuesSteps + 1)).forEach(function (_, index) {
-        var value = index * (maxValue / valuesSteps);
+    var _b = _a.areas, valuesStepsArea = _b.bottom, valuesArea = _b.values, gridLines = _a.gridLines, maxValue = _a.maxValue, valueMapperX = _a.valueMapperX;
+    __spreadArray([], new Array(gridLines + 1)).forEach(function (_, index) {
+        var value = index * (maxValue / gridLines);
         var x = valueMapperX(value);
         ctx.strokeStyle = "grey";
         ctx.lineWidth = 1;
@@ -21,17 +21,21 @@ var paintSteps = function (ctx, _a) {
     });
 };
 var paintLabels = function (ctx, _a) {
-    var labelsArea = _a.areas.left, labels = _a.labels;
-    var slotHeight = labelsArea.height / labels.length;
-    labels.forEach(function (label, index) {
+    var labelsArea = _a.areas.left, data = _a.data;
+    var slotHeight = labelsArea.height / data.length;
+    data
+        .map(function (record) { return record.label; })
+        .forEach(function (label, index) {
         var y = labelsArea.x + index * slotHeight + slotHeight / 2;
         ctx.fillText(label, labelsArea.x, y);
     });
 };
 var paintValues = function (ctx, _a) {
-    var valuesArea = _a.areas.values, values = _a.values, valueMapperX = _a.valueMapperX;
-    var slotHeight = valuesArea.height / values.length;
-    values.forEach(function (value, index) {
+    var valuesArea = _a.areas.values, data = _a.data, valueMapperX = _a.valueMapperX;
+    var slotHeight = valuesArea.height / data.length;
+    data
+        .map(function (record) { return record.value; })
+        .forEach(function (value, index) {
         var y = valuesArea.y + index * slotHeight + slotHeight / 2;
         ctx.strokeStyle = "black";
         ctx.lineWidth = 15;

@@ -4,9 +4,9 @@ var __spreadArray = (this && this.__spreadArray) || function (to, from) {
     return to;
 };
 var paintSteps = function (ctx, _a) {
-    var _b = _a.areas, valuesStepsArea = _b.left, valuesArea = _b.values, valuesSteps = _a.valuesSteps, maxValue = _a.maxValue, valueMapperY = _a.valueMapperY;
-    __spreadArray([], new Array(valuesSteps + 1)).forEach(function (_, index) {
-        var value = index * (maxValue / valuesSteps);
+    var _b = _a.areas, valuesStepsArea = _b.left, valuesArea = _b.values, gridLines = _a.gridLines, maxValue = _a.maxValue, valueMapperY = _a.valueMapperY;
+    __spreadArray([], new Array(gridLines + 1)).forEach(function (_, index) {
+        var value = index * (maxValue / gridLines);
         var y = valueMapperY(value);
         ctx.strokeStyle = "grey";
         ctx.lineWidth = 1;

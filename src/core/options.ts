@@ -1,22 +1,21 @@
 import { ChartInternalOptions, ChartOptions } from "./../models";
 
+const MARGIN = 50;
 const VALUES_STEPS_AREA_WIDTH = 50;
 const LABELS_AREA_HEIGHT = 50;
 
 export const handleOptions: (options: ChartOptions) => ChartInternalOptions = ({
+  type,
   data,
-  valuesSteps = 3,
   width,
   height,
-  margin = 50,
-  barWidth = 20,
-  style = "",
+  gridLines = 3,
 }) => {
   const chartArea = {
-    x: margin,
-    y: margin,
-    width: width - 2 * margin,
-    height: height - 2 * margin,
+    x: MARGIN,
+    y: MARGIN,
+    width: width - 2 * MARGIN,
+    height: height - 2 * MARGIN,
   };
 
   const bottom = {
@@ -57,14 +56,12 @@ export const handleOptions: (options: ChartOptions) => ChartInternalOptions = ({
   };
 
   return {
+    type,
     data,
-    maxValue,
-    valuesSteps,
     width,
     height,
-    margin,
-    barWidth,
-    style,
+    gridLines,
+    maxValue,
     areas: { chart: chartArea, bottom, left, values: valuesArea },
     valueMapperX,
     valueMapperY,

@@ -12,5 +12,3 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
 Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(require("./core/chart.js"), exports);
 __exportStar(require("./models.js"), exports);
-__exportStar(require("./bar/vertical.js"), exports);
-__exportStar(require("./bar/horizontal.js"), exports);

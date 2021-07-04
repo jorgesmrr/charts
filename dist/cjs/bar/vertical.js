@@ -7,9 +7,9 @@ var __spreadArray = (this && this.__spreadArray) || function (to, from) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.verticalBarPainter = void 0;
 var paintSteps = function (ctx, _a) {
-    var _b = _a.areas, valuesStepsArea = _b.left, valuesArea = _b.values, valuesSteps = _a.valuesSteps, maxValue = _a.maxValue, valueMapperY = _a.valueMapperY;
-    __spreadArray([], new Array(valuesSteps + 1)).forEach(function (_, index) {
-        var value = index * (maxValue / valuesSteps);
+    var _b = _a.areas, valuesStepsArea = _b.left, valuesArea = _b.values, gridLines = _a.gridLines, maxValue = _a.maxValue, valueMapperY = _a.valueMapperY;
+    __spreadArray([], new Array(gridLines + 1)).forEach(function (_, index) {
+        var value = index * (maxValue / gridLines);
         var y = valueMapperY(value);
         ctx.strokeStyle = "grey";
         ctx.lineWidth = 1;
@@ -21,9 +21,11 @@ var paintSteps = function (ctx, _a) {
     });
 };
 var paintLabels = function (ctx, _a) {
-    var labelsArea = _a.areas.bottom, labels = _a.labels;
-    var slotWidth = labelsArea.width / labels.length;
-    labels.forEach(function (label, index) {
+    var labelsArea = _a.areas.bottom, data = _a.data;
+    var slotWidth = labelsArea.width / data.length;
+    data
+        .map(function (record) { return record.label; })
+        .forEach(function (label, index) {
         var textDimensions = ctx.measureText(label);
         var originX = labelsArea.x + index * slotWidth + slotWidth / 2;
         var centeredX = originX - textDimensions.width / 2;
@@ -31,9 +33,11 @@ var paintLabels = function (ctx, _a) {
     });
 };
 var paintValues = function (ctx, _a) {
-    var valuesArea = _a.areas.values, values = _a.values, valueMapperY = _a.valueMapperY;
-    var slotWidth = valuesArea.width / values.length;
-    values.forEach(function (value, index) {
+    var valuesArea = _a.areas.values, data = _a.data, valueMapperY = _a.valueMapperY;
+    var slotWidth = valuesArea.width / data.length;
+    data
+        .map(function (record) { return record.value; })
+        .forEach(function (value, index) {
         var x = valuesArea.x + index * slotWidth + slotWidth / 2;
         ctx.strokeStyle = "black";
         ctx.lineWidth = 15;

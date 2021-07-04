@@ -4,13 +4,13 @@ const paintSteps: ChartPainterTask = (
   ctx,
   {
     areas: { bottom: valuesStepsArea, values: valuesArea },
-    valuesSteps,
+    gridLines,
     maxValue,
     valueMapperX,
   }
 ) => {
-  [...new Array(valuesSteps + 1)].forEach((_, index) => {
-    const value = index * (maxValue / valuesSteps);
+  [...new Array(gridLines + 1)].forEach((_, index) => {
+    const value = index * (maxValue / gridLines);
     const x = valueMapperX(value);
 
     ctx.strokeStyle = "grey";

@@ -12,23 +12,14 @@ export interface ChartData {
 export interface ChartOptions {
   type: ChartType;
   data: ChartData[];
-  valuesSteps?: number;
   width: number;
   height: number;
-  margin?: number;
-  barWidth?: number;
-  style?: string;
+  gridLines?: number;
 }
 
-export interface ChartInternalOptions {
-  data: ChartData[];
+export interface ChartInternalOptions extends ChartOptions {
+  gridLines: number;
   maxValue: number;
-  valuesSteps: number;
-  width: number;
-  height: number;
-  margin: number;
-  barWidth: number;
-  style: string;
   areas: {
     chart: ChartArea;
     bottom: ChartArea;

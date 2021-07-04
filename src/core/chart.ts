@@ -1,6 +1,6 @@
 import { horizontalBarPainter } from "../bar/horizontal.js";
 import { verticalBarPainter } from "../bar/vertical.js";
-import { ChartPainter, ChartOptions, Chart, ChartData } from "../models.js";
+import { ChartOptions, Chart, ChartData } from "../models.js";
 import { handleOptions } from "./options.js";
 
 const painterByTypeMap = {
@@ -26,7 +26,7 @@ export const paintChart: (
   if (!options.width) throw Error("You must provide the width!");
   if (!options.height) throw Error("You must provide the height!");
 
-  rootElement.innerHTML = `<canvas id="canvas" width="${options.width}" height="${options.height}" style="${options.style}" />`;
+  rootElement.innerHTML = `<canvas id="canvas" width="${options.width}" height="${options.height}" />`;
 
   const canvas = document.getElementById("canvas") as HTMLCanvasElement;
   const ctx = canvas.getContext("2d") as CanvasRenderingContext2D;

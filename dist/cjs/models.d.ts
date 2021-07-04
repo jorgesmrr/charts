@@ -1,26 +1,21 @@
 export interface Chart {
-    update: (values: number[], labels: string[]) => void;
+    update: (data: ChartData[]) => void;
+}
+export declare type ChartType = "horizontal-bars" | "vertical-bars";
+export interface ChartData {
+    label: string;
+    value: number;
 }
 export interface ChartOptions {
-    labels: string[];
-    values: number[];
-    valuesSteps?: number;
+    type: ChartType;
+    data: ChartData[];
     width: number;
     height: number;
-    margin?: number;
-    barWidth?: number;
-    style?: string;
+    gridLines?: number;
 }
-export interface ChartInternalOptions {
-    labels: string[];
-    values: number[];
+export interface ChartInternalOptions extends ChartOptions {
+    gridLines: number;
     maxValue: number;
-    valuesSteps: number;
-    width: number;
-    height: number;
-    margin: number;
-    barWidth: number;
-    style: string;
     areas: {
         chart: ChartArea;
         bottom: ChartArea;
