@@ -1,9 +1,11 @@
 import { ChartPainterTask } from "../models";
 
+const MAX_BAR_WIDTH = 15;
+
 const paintSteps: ChartPainterTask = (
   ctx,
   {
-    areas: { left: valuesStepsArea, values: valuesArea },
+    areas: { left: valuesStepsArea, plot: valuesArea },
     gridLines,
     maxValue,
     valueMapperY,
@@ -44,7 +46,7 @@ const paintLabels: ChartPainterTask = (
 
 const paintValues: ChartPainterTask = (
   ctx,
-  { areas: { values: valuesArea }, data, valueMapperY }
+  { areas: { plot: valuesArea }, data, valueMapperY }
 ) => {
   const slotWidth = valuesArea.width / data.length;
 
@@ -54,7 +56,7 @@ const paintValues: ChartPainterTask = (
       const x = valuesArea.x + index * slotWidth + slotWidth / 2;
 
       ctx.strokeStyle = "black";
-      ctx.lineWidth = 15;
+      ctx.lineWidth = Math.min(slotWidth - 2, MAX_BAR_WIDTH);
       ctx.beginPath();
       ctx.moveTo(x, valueMapperY(value));
       ctx.lineTo(x, valuesArea.y + valuesArea.height);

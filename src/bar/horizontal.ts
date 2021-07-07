@@ -1,9 +1,11 @@
 import { ChartPainterTask } from "../models";
 
+const MAX_BAR_WIDTH = 15;
+
 const paintSteps: ChartPainterTask = (
   ctx,
   {
-    areas: { bottom: valuesStepsArea, values: valuesArea },
+    areas: { bottom: valuesStepsArea, plot: plotArea },
     gridLines,
     maxValue,
     valueMapperX,
@@ -16,8 +18,8 @@ const paintSteps: ChartPainterTask = (
     ctx.strokeStyle = "grey";
     ctx.lineWidth = 1;
     ctx.beginPath();
-    ctx.moveTo(x, valuesArea.y);
-    ctx.lineTo(x, valuesArea.y + valuesArea.height);
+    ctx.moveTo(x, plotArea.y);
+    ctx.lineTo(x, plotArea.y + plotArea.height);
     ctx.stroke();
 
     ctx.fillText(
@@ -45,19 +47,19 @@ const paintLabels: ChartPainterTask = (
 
 const paintValues: ChartPainterTask = (
   ctx,
-  { areas: { values: valuesArea }, data, valueMapperX }
+  { areas: { plot: plotArea }, data, valueMapperX }
 ) => {
-  const slotHeight = valuesArea.height / data.length;
+  const slotHeight = plotArea.height / data.length;
 
   data
     .map((record) => record.value)
     .forEach((value, index) => {
-      const y = valuesArea.y + index * slotHeight + slotHeight / 2;
+      const y = plotArea.y + index * slotHeight + slotHeight / 2;
 
       ctx.strokeStyle = "black";
-      ctx.lineWidth = 15;
+      ctx.lineWidth = Math.min(slotHeight - 2, MAX_BAR_WIDTH);
       ctx.beginPath();
-      ctx.moveTo(valuesArea.x, y);
+      ctx.moveTo(plotArea.x, y);
       ctx.lineTo(valueMapperX(value), y);
       ctx.stroke();
     });

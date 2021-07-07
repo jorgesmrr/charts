@@ -18,25 +18,25 @@ export const handleOptions: (options: ChartOptions) => ChartInternalOptions = ({
     height: height - 2 * MARGIN,
   };
 
-  const bottom = {
+  const bottomArea = {
     x: chartArea.x + VALUES_STEPS_AREA_WIDTH,
     y: chartArea.y + chartArea.height - LABELS_AREA_HEIGHT,
     width: chartArea.width - VALUES_STEPS_AREA_WIDTH,
     height: LABELS_AREA_HEIGHT,
   };
 
-  const left = {
+  const leftArea = {
     x: chartArea.x,
     y: chartArea.y,
     width: VALUES_STEPS_AREA_WIDTH,
-    height: chartArea.height - bottom.height,
+    height: chartArea.height - bottomArea.height,
   };
 
-  const valuesArea = {
-    x: left.x + left.width,
+  const plotArea = {
+    x: leftArea.x + leftArea.width,
     y: chartArea.y,
-    width: chartArea.width - left.width,
-    height: chartArea.height - bottom.height,
+    width: chartArea.width - leftArea.width,
+    height: chartArea.height - bottomArea.height,
   };
 
   const maxValue = data.reduce(
@@ -46,13 +46,13 @@ export const handleOptions: (options: ChartOptions) => ChartInternalOptions = ({
   );
 
   const valueMapperX = (value: number) => {
-    const valuesRatio = maxValue / valuesArea.width;
-    return valuesArea.x + value / valuesRatio;
+    const valuesRatio = maxValue / plotArea.width;
+    return plotArea.x + value / valuesRatio;
   };
 
   const valueMapperY = (value: number) => {
-    const valuesRatio = maxValue / valuesArea.height;
-    return valuesArea.y + valuesArea.height - value / valuesRatio;
+    const valuesRatio = maxValue / plotArea.height;
+    return plotArea.y + plotArea.height - value / valuesRatio;
   };
 
   return {
@@ -62,7 +62,12 @@ export const handleOptions: (options: ChartOptions) => ChartInternalOptions = ({
     height,
     gridLines,
     maxValue,
-    areas: { chart: chartArea, bottom, left, values: valuesArea },
+    areas: {
+      chart: chartArea,
+      bottom: bottomArea,
+      left: leftArea,
+      plot: plotArea,
+    },
     valueMapperX,
     valueMapperY,
   };

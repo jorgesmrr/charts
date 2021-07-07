@@ -5,6 +5,7 @@
   "main": "./dist/cjs/index.js",
   "module": "./dist/esm/index.js",
   "types": "./dist/esm/index.d.ts",
+  "repository": "https://github.com/jorgesmrr/charts.git",
   "author": "Jorge Moreira <jorge.smrr@gmail.com> (https://jorgemoreira.vercel.app/)",
   "license": "MIT",
   "files": [

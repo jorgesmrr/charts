@@ -20,7 +20,7 @@ export interface ChartInternalOptions extends ChartOptions {
         chart: ChartArea;
         bottom: ChartArea;
         left: ChartArea;
-        values: ChartArea;
+        plot: ChartArea;
     };
     valueMapperX: (value: number) => number;
     valueMapperY: (value: number) => number;
