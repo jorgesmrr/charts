@@ -9,13 +9,16 @@ export interface ChartDataset {
 }
 export interface ChartOptions {
     type: ChartType;
+    title: string;
     labels: string[];
     datasets: ChartDataset[];
     width: number;
     height: number;
     gridLines?: number;
 }
-export interface ChartInternalOptions extends ChartOptions {
+export interface ChartInternalOptions {
+    labels: string[];
+    datasets: ChartDataset[];
     gridLines: number;
     maxValue: number;
     areas: {

@@ -10,16 +10,32 @@ var __assign = (this && this.__assign) || function () {
     return __assign.apply(this, arguments);
 };
 var _a;
-import { horizontalBarPainter } from "../bar/horizontal.js";
-import { verticalBarPainter } from "../bar/vertical.js";
+import { horizontalBarPainter } from "../painters/bar/horizontal.js";
+import { verticalBarPainter } from "../painters/bar/vertical.js";
+import { paintLegendAndGetArea } from "../painters/legend.js";
+import { paintTitleAndGetArea } from "../painters/title.js";
 import { handleOptions } from "./options.js";
 var painterByTypeMap = (_a = {},
     _a["horizontal-bars"] = horizontalBarPainter,
     _a["vertical-bars"] = verticalBarPainter,
     _a);
 var update = function (ctx, options) {
+    var chartArea = {
+        x: 0,
+        y: 0,
+        width: options.width,
+        height: options.height,
+    };
+    var titleArea = paintTitleAndGetArea(ctx, chartArea, options.title);
+    var datasetsLabelsArea = paintLegendAndGetArea(ctx, chartArea.x, chartArea.y + titleArea.height, chartArea.width, options.datasets.map(function (dataset) { return dataset.label; }));
+    var remainingArea = {
+        x: chartArea.x,
+        y: datasetsLabelsArea.y + datasetsLabelsArea.height,
+        width: chartArea.width,
+        height: chartArea.height - (titleArea.height + datasetsLabelsArea.height),
+    };
     var painter = painterByTypeMap[options.type];
-    var finalOptions = handleOptions(options);
+    var finalOptions = handleOptions(remainingArea, options);
     painter.paintSteps(ctx, finalOptions);
     painter.paintLabels(ctx, finalOptions);
     painter.paintValues(ctx, finalOptions);

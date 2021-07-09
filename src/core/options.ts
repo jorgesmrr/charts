@@ -1,43 +1,39 @@
-import { ChartDataset, ChartInternalOptions, ChartOptions } from "./../models";
+import {
+  ChartArea,
+  ChartDataset,
+  ChartInternalOptions,
+  ChartOptions,
+} from "./../models";
 
-const MARGIN = 50;
-const VALUES_STEPS_AREA_WIDTH = 50;
-const LABELS_AREA_HEIGHT = 50;
+const GRIDLINES_LABELS_AREA_WIDTH = 50;
+const SERIES_LABELS_AREA_HEIGHT = 50;
 
-export const handleOptions: (options: ChartOptions) => ChartInternalOptions = ({
-  type,
-  labels,
-  datasets,
-  width,
-  height,
-  gridLines = 3,
-}) => {
-  const chartArea = {
-    x: MARGIN,
-    y: MARGIN,
-    width: width - 2 * MARGIN,
-    height: height - 2 * MARGIN,
-  };
-
+export const handleOptions: (
+  area: ChartArea,
+  options: ChartOptions
+) => ChartInternalOptions = (
+  area,
+  { type, labels, datasets, gridLines = 3 }
+) => {
   const bottomArea = {
-    x: chartArea.x + VALUES_STEPS_AREA_WIDTH,
-    y: chartArea.y + chartArea.height - LABELS_AREA_HEIGHT,
-    width: chartArea.width - VALUES_STEPS_AREA_WIDTH,
-    height: LABELS_AREA_HEIGHT,
+    x: area.x + GRIDLINES_LABELS_AREA_WIDTH,
+    y: area.y + area.height - SERIES_LABELS_AREA_HEIGHT,
+    width: area.width - GRIDLINES_LABELS_AREA_WIDTH,
+    height: SERIES_LABELS_AREA_HEIGHT,
   };
 
   const leftArea = {
-    x: chartArea.x,
-    y: chartArea.y,
-    width: VALUES_STEPS_AREA_WIDTH,
-    height: chartArea.height - bottomArea.height,
+    x: area.x,
+    y: area.y,
+    width: GRIDLINES_LABELS_AREA_WIDTH,
+    height: area.height - bottomArea.height,
   };
 
   const plotArea = {
     x: leftArea.x + leftArea.width,
-    y: chartArea.y,
-    width: chartArea.width - leftArea.width,
-    height: chartArea.height - bottomArea.height,
+    y: area.y,
+    width: area.width - leftArea.width,
+    height: area.height - bottomArea.height,
   };
 
   const findDatasetMaxValue = (dataset: ChartDataset) =>
@@ -65,12 +61,10 @@ export const handleOptions: (options: ChartOptions) => ChartInternalOptions = ({
     type,
     labels,
     datasets,
-    width,
-    height,
     gridLines,
     maxValue,
     areas: {
-      chart: chartArea,
+      chart: area,
       bottom: bottomArea,
       left: leftArea,
       plot: plotArea,

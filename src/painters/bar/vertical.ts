@@ -1,4 +1,4 @@
-import { ChartPainterTask } from "../models";
+import { ChartPainterTask } from "../../models";
 
 const MAX_BAR_WIDTH = 15;
 
@@ -11,12 +11,14 @@ const paintSteps: ChartPainterTask = (
     valueMapperY,
   }
 ) => {
+  ctx.textBaseline = "alphabetic";
+  ctx.strokeStyle = "grey";
+  ctx.lineWidth = 1;
+
   [...new Array(gridLines + 1)].forEach((_, index) => {
     const value = index * (maxValue / gridLines);
     const y = valueMapperY(value);
 
-    ctx.strokeStyle = "grey";
-    ctx.lineWidth = 1;
     ctx.beginPath();
     ctx.moveTo(valuesArea.x, y);
     ctx.lineTo(valuesArea.x + valuesArea.width, y);
@@ -31,6 +33,9 @@ const paintLabels: ChartPainterTask = (
   { areas: { bottom: labelsArea }, labels }
 ) => {
   const slotWidth = labelsArea.width / labels.length;
+
+  ctx.textBaseline = "alphabetic";
+
   labels.forEach((label, index) => {
     const textDimensions = ctx.measureText(label);
     const originX = labelsArea.x + index * slotWidth + slotWidth / 2;
@@ -46,6 +51,9 @@ const paintValues: ChartPainterTask = (
   const slotWidth = plotArea.width / labels.length;
   const barWidth = Math.min(slotWidth / datasets.length, MAX_BAR_WIDTH);
 
+  ctx.strokeStyle = "black";
+  ctx.lineWidth = barWidth;
+
   datasets.forEach((dataset, datasetIndex) => {
     dataset.data.forEach((value, index) => {
       const slotCenterX = plotArea.x + slotWidth * index + slotWidth / 2;
@@ -53,8 +61,6 @@ const paintValues: ChartPainterTask = (
 
       const barX = slotOriginX + barWidth * datasetIndex + barWidth / 2;
 
-      ctx.strokeStyle = "black";
-      ctx.lineWidth = barWidth;
       ctx.beginPath();
       ctx.moveTo(barX, valueMapperY(value));
       ctx.lineTo(barX, plotArea.y + plotArea.height);

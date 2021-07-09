@@ -1,5 +1,5 @@
 import { Chart, paintChart, ChartType } from "./../dist/esm/index.js";
-import dataForm from "./values-form.js";
+// TODO import dataForm from "./values-form.js";
 
 let chart: Chart;
 
@@ -8,24 +8,23 @@ const root = document.getElementById("chart") as HTMLElement;
 const horizontalBarsRadio = document.getElementById("horizontal-bars-radio");
 const verticalBarsRadio = document.getElementById("vertical-bars-radio");
 
-const valuesForm = document.getElementById("values-container") as HTMLElement;
+// TODO const valuesForm = document.getElementById("values-container") as HTMLElement;
 
-const addDataButton = document.getElementById("add-data-btn");
+// TODO const addDataButton = document.getElementById("add-data-btn");
 
-const datasets = [
-  {
-    label: "A",
-    data: [100, 200, 300],
-  },
-  {
-    label: "B",
-    data: [150, 250, 350],
-  },
-];
+const datasets = ["A", "B", "C", "D", "E"].map((label, index, { length }) => ({
+  label,
+  data: [
+    (100 * index * 1) / length,
+    (200 * index * 1) / length,
+    (300 * index * 1) / length,
+  ],
+}));
 
 const showChart = (type: ChartType) =>
   (chart = paintChart(root, {
     type,
+    title: "Chart",
     labels: ["1", "2", "3"],
     datasets,
     width: 700,

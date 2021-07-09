@@ -1,31 +1,24 @@
-var MARGIN = 50;
-var VALUES_STEPS_AREA_WIDTH = 50;
-var LABELS_AREA_HEIGHT = 50;
-export var handleOptions = function (_a) {
-    var type = _a.type, labels = _a.labels, datasets = _a.datasets, width = _a.width, height = _a.height, _b = _a.gridLines, gridLines = _b === void 0 ? 3 : _b;
-    var chartArea = {
-        x: MARGIN,
-        y: MARGIN,
-        width: width - 2 * MARGIN,
-        height: height - 2 * MARGIN,
-    };
+var GRIDLINES_LABELS_AREA_WIDTH = 50;
+var SERIES_LABELS_AREA_HEIGHT = 50;
+export var handleOptions = function (area, _a) {
+    var type = _a.type, labels = _a.labels, datasets = _a.datasets, _b = _a.gridLines, gridLines = _b === void 0 ? 3 : _b;
     var bottomArea = {
-        x: chartArea.x + VALUES_STEPS_AREA_WIDTH,
-        y: chartArea.y + chartArea.height - LABELS_AREA_HEIGHT,
-        width: chartArea.width - VALUES_STEPS_AREA_WIDTH,
-        height: LABELS_AREA_HEIGHT,
+        x: area.x + GRIDLINES_LABELS_AREA_WIDTH,
+        y: area.y + area.height - SERIES_LABELS_AREA_HEIGHT,
+        width: area.width - GRIDLINES_LABELS_AREA_WIDTH,
+        height: SERIES_LABELS_AREA_HEIGHT,
     };
     var leftArea = {
-        x: chartArea.x,
-        y: chartArea.y,
-        width: VALUES_STEPS_AREA_WIDTH,
-        height: chartArea.height - bottomArea.height,
+        x: area.x,
+        y: area.y,
+        width: GRIDLINES_LABELS_AREA_WIDTH,
+        height: area.height - bottomArea.height,
     };
     var plotArea = {
         x: leftArea.x + leftArea.width,
-        y: chartArea.y,
-        width: chartArea.width - leftArea.width,
-        height: chartArea.height - bottomArea.height,
+        y: area.y,
+        width: area.width - leftArea.width,
+        height: area.height - bottomArea.height,
     };
     var findDatasetMaxValue = function (dataset) {
         return dataset.data.reduce(function (previous, current) { return (current > previous ? current : previous); }, 0);
@@ -46,12 +39,10 @@ export var handleOptions = function (_a) {
         type: type,
         labels: labels,
         datasets: datasets,
-        width: width,
-        height: height,
         gridLines: gridLines,
         maxValue: maxValue,
         areas: {
-            chart: chartArea,
+            chart: area,
             bottom: bottomArea,
             left: leftArea,
             plot: plotArea,
