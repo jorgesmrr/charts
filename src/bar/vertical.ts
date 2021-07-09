@@ -28,40 +28,39 @@ const paintSteps: ChartPainterTask = (
 
 const paintLabels: ChartPainterTask = (
   ctx,
-  { areas: { bottom: labelsArea }, data }
+  { areas: { bottom: labelsArea }, labels }
 ) => {
-  const slotWidth = labelsArea.width / data.length;
-
-  data
-    .map((record) => record.label)
-    .forEach((label, index) => {
-      const textDimensions = ctx.measureText(label);
-
-      const originX = labelsArea.x + index * slotWidth + slotWidth / 2;
-      const centeredX = originX - textDimensions.width / 2;
-
-      ctx.fillText(label, centeredX, labelsArea.y + labelsArea.height);
-    });
+  const slotWidth = labelsArea.width / labels.length;
+  labels.forEach((label, index) => {
+    const textDimensions = ctx.measureText(label);
+    const originX = labelsArea.x + index * slotWidth + slotWidth / 2;
+    const centeredX = originX - textDimensions.width / 2;
+    ctx.fillText(label, centeredX, labelsArea.y + labelsArea.height);
+  });
 };
 
 const paintValues: ChartPainterTask = (
   ctx,
-  { areas: { plot: valuesArea }, data, valueMapperY }
+  { areas: { plot: plotArea }, labels, datasets, valueMapperY }
 ) => {
-  const slotWidth = valuesArea.width / data.length;
+  const slotWidth = plotArea.width / labels.length;
+  const barWidth = Math.min(slotWidth / datasets.length, MAX_BAR_WIDTH);
 
-  data
-    .map((record) => record.value)
-    .forEach((value, index) => {
-      const x = valuesArea.x + index * slotWidth + slotWidth / 2;
+  datasets.forEach((dataset, datasetIndex) => {
+    dataset.data.forEach((value, index) => {
+      const slotCenterX = plotArea.x + slotWidth * index + slotWidth / 2;
+      const slotOriginX = slotCenterX - (barWidth * datasets.length) / 2;
+
+      const barX = slotOriginX + barWidth * datasetIndex + barWidth / 2;
 
       ctx.strokeStyle = "black";
-      ctx.lineWidth = Math.min(slotWidth - 2, MAX_BAR_WIDTH);
+      ctx.lineWidth = barWidth;
       ctx.beginPath();
-      ctx.moveTo(x, valueMapperY(value));
-      ctx.lineTo(x, valuesArea.y + valuesArea.height);
+      ctx.moveTo(barX, valueMapperY(value));
+      ctx.lineTo(barX, plotArea.y + plotArea.height);
       ctx.stroke();
     });
+  });
 };
 
 export const verticalBarPainter = {

@@ -1,6 +1,6 @@
 import { horizontalBarPainter } from "../bar/horizontal.js";
 import { verticalBarPainter } from "../bar/vertical.js";
-import { ChartOptions, Chart, ChartData } from "../models.js";
+import { ChartOptions, Chart, ChartDataset } from "../models.js";
 import { handleOptions } from "./options.js";
 
 const painterByTypeMap = {
@@ -22,7 +22,7 @@ export const paintChart: (
   options: ChartOptions
 ) => Chart = (rootElement, options) => {
   if (!options) throw Error("You must provide the options!");
-  if (!options.data) throw Error("You must provide the data!");
+  if (!options.datasets) throw Error("You must provide the datasets!");
   if (!options.width) throw Error("You must provide the width!");
   if (!options.height) throw Error("You must provide the height!");
 
@@ -34,9 +34,9 @@ export const paintChart: (
 
   update(ctx, options);
 
-  const wrappedUpdate = (data: ChartData[]) => {
+  const wrappedUpdate = (datasets: ChartDataset[]) => {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    update(ctx, { ...options, data });
+    update(ctx, { ...options, datasets });
   };
 
   return {

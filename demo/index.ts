@@ -12,16 +12,22 @@ const valuesForm = document.getElementById("values-container") as HTMLElement;
 
 const addDataButton = document.getElementById("add-data-btn");
 
-const data = [
-  { label: "A:", value: 100 },
-  { label: "B:", value: 200 },
-  { label: "C:", value: 300 },
+const datasets = [
+  {
+    label: "A",
+    data: [100, 200, 300],
+  },
+  {
+    label: "B",
+    data: [150, 250, 350],
+  },
 ];
 
 const showChart = (type: ChartType) =>
   (chart = paintChart(root, {
     type,
-    data,
+    labels: ["1", "2", "3"],
+    datasets,
     width: 700,
     height: 500,
   }));
@@ -43,21 +49,21 @@ verticalBarsRadio?.addEventListener(
   getChartTypeChangeHandler("vertical-bars")
 );
 
-data.forEach((record) =>
-  dataForm(valuesForm, record, () => chart.update(data))
-);
+// TODO data.forEach((record) =>
+//   dataForm(valuesForm, record, () => chart.update(datasets))
+// );
 
-addDataButton?.addEventListener("click", () => {
-  const label = String.fromCharCode(
-    data[data.length - 1].label.charCodeAt(0) + 1
-  );
+// TODO addDataButton?.addEventListener("click", () => {
+//   const label = String.fromCharCode(
+//     data[data.length - 1].label.charCodeAt(0) + 1
+//   );
 
-  const record = { label: `${label}:`, value: 150 };
-  data.push(record);
+//   const record = { label: `${label}:`, value: 150 };
+//   data.push(record);
 
-  dataForm(valuesForm, record, () => chart.update(data));
+//   dataForm(valuesForm, record, () => chart.update(data));
 
-  chart.update(data);
-});
+//   chart.update(data);
+// });
 
 showChart("vertical-bars");

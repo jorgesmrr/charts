@@ -27,8 +27,8 @@ var update = function (ctx, options) {
 export var paintChart = function (rootElement, options) {
     if (!options)
         throw Error("You must provide the options!");
-    if (!options.data)
-        throw Error("You must provide the data!");
+    if (!options.datasets)
+        throw Error("You must provide the datasets!");
     if (!options.width)
         throw Error("You must provide the width!");
     if (!options.height)
@@ -38,9 +38,9 @@ export var paintChart = function (rootElement, options) {
     var ctx = canvas.getContext("2d");
     ctx.font = "16px sans-serif";
     update(ctx, options);
-    var wrappedUpdate = function (data) {
+    var wrappedUpdate = function (datasets) {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-        update(ctx, __assign(__assign({}, options), { data: data }));
+        update(ctx, __assign(__assign({}, options), { datasets: datasets }));
     };
     return {
         update: wrappedUpdate,

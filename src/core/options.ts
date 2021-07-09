@@ -1,4 +1,4 @@
-import { ChartInternalOptions, ChartOptions } from "./../models";
+import { ChartDataset, ChartInternalOptions, ChartOptions } from "./../models";
 
 const MARGIN = 50;
 const VALUES_STEPS_AREA_WIDTH = 50;
@@ -6,7 +6,8 @@ const LABELS_AREA_HEIGHT = 50;
 
 export const handleOptions: (options: ChartOptions) => ChartInternalOptions = ({
   type,
-  data,
+  labels,
+  datasets,
   width,
   height,
   gridLines = 3,
@@ -39,11 +40,16 @@ export const handleOptions: (options: ChartOptions) => ChartInternalOptions = ({
     height: chartArea.height - bottomArea.height,
   };
 
-  const maxValue = data.reduce(
-    (previous, current) =>
-      current.value > previous ? current.value : previous,
-    data[0].value
-  );
+  const findDatasetMaxValue = (dataset: ChartDataset) =>
+    dataset.data.reduce(
+      (previous, current) => (current > previous ? current : previous),
+      0
+    );
+
+  const maxValue = datasets.reduce((previous, current) => {
+    const currentMaxValue = findDatasetMaxValue(current);
+    return currentMaxValue > previous ? currentMaxValue : previous;
+  }, 0);
 
   const valueMapperX = (value: number) => {
     const valuesRatio = maxValue / plotArea.width;
@@ -57,7 +63,8 @@ export const handleOptions: (options: ChartOptions) => ChartInternalOptions = ({
 
   return {
     type,
-    data,
+    labels,
+    datasets,
     width,
     height,
     gridLines,

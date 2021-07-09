@@ -32,37 +32,37 @@ const paintSteps: ChartPainterTask = (
 
 const paintLabels: ChartPainterTask = (
   ctx,
-  { areas: { left: labelsArea }, data }
+  { areas: { left: labelsArea }, labels }
 ) => {
-  const slotHeight = labelsArea.height / data.length;
-
-  data
-    .map((record) => record.label)
-    .forEach((label, index) => {
-      const y = labelsArea.x + index * slotHeight + slotHeight / 2;
-
-      ctx.fillText(label, labelsArea.x, y);
-    });
+  const slotHeight = labelsArea.height / labels.length;
+  labels.forEach((label, index) => {
+    const y = labelsArea.x + index * slotHeight + slotHeight / 2;
+    ctx.fillText(label, labelsArea.x, y);
+  });
 };
 
 const paintValues: ChartPainterTask = (
   ctx,
-  { areas: { plot: plotArea }, data, valueMapperX }
+  { areas: { plot: plotArea }, labels, datasets, valueMapperX }
 ) => {
-  const slotHeight = plotArea.height / data.length;
+  const slotHeight = plotArea.height / labels.length;
+  const barHeight = Math.min(slotHeight / datasets.length, MAX_BAR_WIDTH);
 
-  data
-    .map((record) => record.value)
-    .forEach((value, index) => {
-      const y = plotArea.y + index * slotHeight + slotHeight / 2;
+  datasets.forEach((dataset, datasetIndex) => {
+    dataset.data.forEach((value, index) => {
+      const slotCenterY = plotArea.y + slotHeight * index + slotHeight / 2;
+      const slotOriginY = slotCenterY - (barHeight * datasets.length) / 2;
+
+      const barY = slotOriginY + barHeight * datasetIndex + barHeight / 2;
 
       ctx.strokeStyle = "black";
-      ctx.lineWidth = Math.min(slotHeight - 2, MAX_BAR_WIDTH);
+      ctx.lineWidth = barHeight;
       ctx.beginPath();
-      ctx.moveTo(plotArea.x, y);
-      ctx.lineTo(valueMapperX(value), y);
+      ctx.moveTo(plotArea.x, barY);
+      ctx.lineTo(valueMapperX(value), barY);
       ctx.stroke();
     });
+  });
 };
 
 export const horizontalBarPainter = {

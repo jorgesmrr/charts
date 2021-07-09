@@ -19,11 +19,9 @@ var paintSteps = function (ctx, _a) {
     });
 };
 var paintLabels = function (ctx, _a) {
-    var labelsArea = _a.areas.bottom, data = _a.data;
-    var slotWidth = labelsArea.width / data.length;
-    data
-        .map(function (record) { return record.label; })
-        .forEach(function (label, index) {
+    var labelsArea = _a.areas.bottom, labels = _a.labels;
+    var slotWidth = labelsArea.width / labels.length;
+    labels.forEach(function (label, index) {
         var textDimensions = ctx.measureText(label);
         var originX = labelsArea.x + index * slotWidth + slotWidth / 2;
         var centeredX = originX - textDimensions.width / 2;
@@ -31,18 +29,21 @@ var paintLabels = function (ctx, _a) {
     });
 };
 var paintValues = function (ctx, _a) {
-    var valuesArea = _a.areas.plot, data = _a.data, valueMapperY = _a.valueMapperY;
-    var slotWidth = valuesArea.width / data.length;
-    data
-        .map(function (record) { return record.value; })
-        .forEach(function (value, index) {
-        var x = valuesArea.x + index * slotWidth + slotWidth / 2;
-        ctx.strokeStyle = "black";
-        ctx.lineWidth = Math.min(slotWidth - 2, MAX_BAR_WIDTH);
-        ctx.beginPath();
-        ctx.moveTo(x, valueMapperY(value));
-        ctx.lineTo(x, valuesArea.y + valuesArea.height);
-        ctx.stroke();
+    var plotArea = _a.areas.plot, labels = _a.labels, datasets = _a.datasets, valueMapperY = _a.valueMapperY;
+    var slotWidth = plotArea.width / labels.length;
+    var barWidth = Math.min(slotWidth / datasets.length, MAX_BAR_WIDTH);
+    datasets.forEach(function (dataset, datasetIndex) {
+        dataset.data.forEach(function (value, index) {
+            var slotCenterX = plotArea.x + slotWidth * index + slotWidth / 2;
+            var slotOriginX = slotCenterX - (barWidth * datasets.length) / 2;
+            var barX = slotOriginX + barWidth * datasetIndex + barWidth / 2;
+            ctx.strokeStyle = "black";
+            ctx.lineWidth = barWidth;
+            ctx.beginPath();
+            ctx.moveTo(barX, valueMapperY(value));
+            ctx.lineTo(barX, plotArea.y + plotArea.height);
+            ctx.stroke();
+        });
     });
 };
 export var verticalBarPainter = {

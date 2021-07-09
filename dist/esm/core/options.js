@@ -2,7 +2,7 @@ var MARGIN = 50;
 var VALUES_STEPS_AREA_WIDTH = 50;
 var LABELS_AREA_HEIGHT = 50;
 export var handleOptions = function (_a) {
-    var type = _a.type, data = _a.data, width = _a.width, height = _a.height, _b = _a.gridLines, gridLines = _b === void 0 ? 3 : _b;
+    var type = _a.type, labels = _a.labels, datasets = _a.datasets, width = _a.width, height = _a.height, _b = _a.gridLines, gridLines = _b === void 0 ? 3 : _b;
     var chartArea = {
         x: MARGIN,
         y: MARGIN,
@@ -27,9 +27,13 @@ export var handleOptions = function (_a) {
         width: chartArea.width - leftArea.width,
         height: chartArea.height - bottomArea.height,
     };
-    var maxValue = data.reduce(function (previous, current) {
-        return current.value > previous ? current.value : previous;
-    }, data[0].value);
+    var findDatasetMaxValue = function (dataset) {
+        return dataset.data.reduce(function (previous, current) { return (current > previous ? current : previous); }, 0);
+    };
+    var maxValue = datasets.reduce(function (previous, current) {
+        var currentMaxValue = findDatasetMaxValue(current);
+        return currentMaxValue > previous ? currentMaxValue : previous;
+    }, 0);
     var valueMapperX = function (value) {
         var valuesRatio = maxValue / plotArea.width;
         return plotArea.x + value / valuesRatio;
@@ -40,7 +44,8 @@ export var handleOptions = function (_a) {
     };
     return {
         type: type,
-        data: data,
+        labels: labels,
+        datasets: datasets,
         width: width,
         height: height,
         gridLines: gridLines,

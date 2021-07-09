@@ -19,28 +19,29 @@ var paintSteps = function (ctx, _a) {
     });
 };
 var paintLabels = function (ctx, _a) {
-    var labelsArea = _a.areas.left, data = _a.data;
-    var slotHeight = labelsArea.height / data.length;
-    data
-        .map(function (record) { return record.label; })
-        .forEach(function (label, index) {
+    var labelsArea = _a.areas.left, labels = _a.labels;
+    var slotHeight = labelsArea.height / labels.length;
+    labels.forEach(function (label, index) {
         var y = labelsArea.x + index * slotHeight + slotHeight / 2;
         ctx.fillText(label, labelsArea.x, y);
     });
 };
 var paintValues = function (ctx, _a) {
-    var plotArea = _a.areas.plot, data = _a.data, valueMapperX = _a.valueMapperX;
-    var slotHeight = plotArea.height / data.length;
-    data
-        .map(function (record) { return record.value; })
-        .forEach(function (value, index) {
-        var y = plotArea.y + index * slotHeight + slotHeight / 2;
-        ctx.strokeStyle = "black";
-        ctx.lineWidth = Math.min(slotHeight - 2, MAX_BAR_WIDTH);
-        ctx.beginPath();
-        ctx.moveTo(plotArea.x, y);
-        ctx.lineTo(valueMapperX(value), y);
-        ctx.stroke();
+    var plotArea = _a.areas.plot, labels = _a.labels, datasets = _a.datasets, valueMapperX = _a.valueMapperX;
+    var slotHeight = plotArea.height / labels.length;
+    var barHeight = Math.min(slotHeight / datasets.length, MAX_BAR_WIDTH);
+    datasets.forEach(function (dataset, datasetIndex) {
+        dataset.data.forEach(function (value, index) {
+            var slotCenterY = plotArea.y + slotHeight * index + slotHeight / 2;
+            var slotOriginY = slotCenterY - (barHeight * datasets.length) / 2;
+            var barY = slotOriginY + barHeight * datasetIndex + barHeight / 2;
+            ctx.strokeStyle = "black";
+            ctx.lineWidth = barHeight;
+            ctx.beginPath();
+            ctx.moveTo(plotArea.x, barY);
+            ctx.lineTo(valueMapperX(value), barY);
+            ctx.stroke();
+        });
     });
 };
 export var horizontalBarPainter = {

@@ -1,14 +1,16 @@
 export interface Chart {
-    update: (data: ChartData[]) => void;
+    update: (datasets: ChartDataset[]) => void;
 }
 export declare type ChartType = "horizontal-bars" | "vertical-bars";
-export interface ChartData {
+export interface ChartDataset {
     label: string;
-    value: number;
+    data: number[];
+    color?: string;
 }
 export interface ChartOptions {
     type: ChartType;
-    data: ChartData[];
+    labels: string[];
+    datasets: ChartDataset[];
     width: number;
     height: number;
     gridLines?: number;

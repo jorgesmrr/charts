@@ -1,12 +1,10 @@
-import { ChartData } from "../dist/esm/models.js";
-
-const createInput = (data: ChartData, onInput: () => void) => {
+const createInput = (data: number[], index: number, onInput: () => void) => {
   const input = document.createElement("input");
 
   input.setAttribute("type", "number");
-  input.setAttribute("value", data.value.toString());
+  input.setAttribute("value", data[index].toString());
   input.addEventListener("input", ({ target }) => {
-    data.value = Number((target as HTMLInputElement).value);
+    data[index] = Number((target as HTMLInputElement).value);
     onInput();
   });
 
@@ -34,14 +32,15 @@ const createButton = (
 };
 
 const createIncrementButton = (
-  data: ChartData,
+  data: number[],
+  index: number,
   increment: number,
   onIncrement: () => void
 ) => {
   return createButton(
     `${increment > 0 ? "+" : "-"}${Math.abs(increment)}`,
     () => {
-      data.value += increment;
+      data[index] += increment;
       onIncrement();
     }
   );
@@ -49,22 +48,23 @@ const createIncrementButton = (
 
 const dataForm = (
   root: HTMLElement,
-  data: ChartData,
+  data: number[],
+  index: number,
   onChange: () => void
 ): void => {
   const container = document.createElement("div");
 
-  const input = createInput(data, onChange);
-  const labelWithInput = createLabelWithInput(data.label, input);
+  const input = createInput(data, index, onChange);
+  const labelWithInput = createLabelWithInput(index.toString(), input);
 
   const onIncrement = () => {
-    input.value = data.value.toString();
+    input.value = data[index].toString();
     onChange();
   };
 
   container.appendChild(labelWithInput);
-  container.appendChild(createIncrementButton(data, -10, onIncrement));
-  container.appendChild(createIncrementButton(data, 10, onIncrement));
+  container.appendChild(createIncrementButton(data, index, -10, onIncrement));
+  container.appendChild(createIncrementButton(data, index, 10, onIncrement));
 
   root.appendChild(container);
 };
