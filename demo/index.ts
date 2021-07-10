@@ -1,5 +1,4 @@
 import { Chart, paintChart, ChartType } from "./../dist/esm/index.js";
-// TODO import dataForm from "./values-form.js";
 
 let chart: Chart;
 
@@ -8,20 +7,19 @@ const root = document.getElementById("chart") as HTMLElement;
 const horizontalBarsRadio = document.getElementById("horizontal-bars-radio");
 const verticalBarsRadio = document.getElementById("vertical-bars-radio");
 
-// TODO const valuesForm = document.getElementById("values-container") as HTMLElement;
-
-// TODO const addDataButton = document.getElementById("add-data-btn");
+const addDataButton = document.getElementById("add-data-btn");
+const removeDataButton = document.getElementById("remove-data-btn");
 
 const palette = ["#1d3461", "#1f487e", "#376996", "#6290c8", "#829cbc"];
 
-const datasets = ["A", "B", "C", "D", "E"].map((label, index, { length }) => ({
-  label,
-  //color: palette[index],
-  data: [
-    10 + 100 * (index / length),
-    10 + 100 * (index / length),
-    10 + 100 * (index / length),
-  ],
+const getRandomValue = () => {
+  return Math.floor(Math.random() * 500);
+};
+
+const datasets = [...new Array(5)].map((_, index) => ({
+  label: String.fromCharCode(65 + index),
+  color: palette[index % palette.length],
+  data: [getRandomValue(), getRandomValue(), getRandomValue()],
 }));
 
 const showChart = (type: ChartType) =>
@@ -42,6 +40,48 @@ const getChartTypeChangeHandler =
     }
   };
 
+const getNewLabel = () => {
+  if (datasets.length === 0) return "A";
+
+  const previous = datasets[datasets.length - 1].label;
+
+  if (previous.split("").every((letter) => letter === "Z")) {
+    return [...new Array(previous.length + 1)].map(() => "A").join("");
+  } else {
+    let nonZLetterIndex = previous.length - 1;
+    while (previous[nonZLetterIndex] === "Z") {
+      nonZLetterIndex--;
+    }
+
+    const newLetter = String.fromCharCode(
+      previous.charCodeAt(nonZLetterIndex) + 1
+    );
+    let label = `${previous.substring(0, nonZLetterIndex)}${newLetter}`;
+
+    if (label.length < previous.length) {
+      label += [...new Array(previous.length - (nonZLetterIndex + 1))]
+        .map(() => "A")
+        .join("");
+    }
+
+    return label;
+  }
+};
+
+const addDataset = () => {
+  datasets.push({
+    label: getNewLabel(),
+    color: palette[datasets.length % palette.length],
+    data: [getRandomValue(), getRandomValue(), getRandomValue()],
+  });
+  chart.update(datasets);
+};
+
+const removeDataset = () => {
+  datasets.pop();
+  chart.update(datasets);
+};
+
 horizontalBarsRadio?.addEventListener(
   "change",
   getChartTypeChangeHandler("horizontal-bars")
@@ -51,21 +91,7 @@ verticalBarsRadio?.addEventListener(
   getChartTypeChangeHandler("vertical-bars")
 );
 
-// TODO data.forEach((record) =>
-//   dataForm(valuesForm, record, () => chart.update(datasets))
-// );
-
-// TODO addDataButton?.addEventListener("click", () => {
-//   const label = String.fromCharCode(
-//     data[data.length - 1].label.charCodeAt(0) + 1
-//   );
-
-//   const record = { label: `${label}:`, value: 150 };
-//   data.push(record);
-
-//   dataForm(valuesForm, record, () => chart.update(data));
-
-//   chart.update(data);
-// });
+addDataButton?.addEventListener("click", addDataset);
+removeDataButton?.addEventListener("click", removeDataset);
 
 showChart("vertical-bars");
