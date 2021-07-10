@@ -6,12 +6,13 @@ const paintSteps: ChartPainterTask = (
   ctx,
   {
     areas: { left: valuesStepsArea, plot: valuesArea },
-    gridLines,
     maxValue,
     valueMapperY,
-  }
+  },
+  { gridLines }
 ) => {
   ctx.textBaseline = "alphabetic";
+  ctx.fillStyle = "black";
   ctx.strokeStyle = "grey";
   ctx.lineWidth = 1;
 
@@ -24,17 +25,19 @@ const paintSteps: ChartPainterTask = (
     ctx.lineTo(valuesArea.x + valuesArea.width, y);
     ctx.stroke();
 
-    ctx.fillText(Math.floor(value) + "", valuesStepsArea.x, y);
+    ctx.fillText(Math.floor(value).toString(), valuesStepsArea.x, y);
   });
 };
 
 const paintLabels: ChartPainterTask = (
   ctx,
-  { areas: { bottom: labelsArea }, labels }
+  { areas: { bottom: labelsArea } },
+  { labels }
 ) => {
   const slotWidth = labelsArea.width / labels.length;
 
   ctx.textBaseline = "alphabetic";
+  ctx.fillStyle = "black";
 
   labels.forEach((label, index) => {
     const textDimensions = ctx.measureText(label);
@@ -46,15 +49,17 @@ const paintLabels: ChartPainterTask = (
 
 const paintValues: ChartPainterTask = (
   ctx,
-  { areas: { plot: plotArea }, labels, datasets, valueMapperY }
+  { areas: { plot: plotArea }, valueMapperY },
+  { labels, datasets }
 ) => {
   const slotWidth = plotArea.width / labels.length;
   const barWidth = Math.min(slotWidth / datasets.length, MAX_BAR_WIDTH);
 
-  ctx.strokeStyle = "black";
   ctx.lineWidth = barWidth;
 
   datasets.forEach((dataset, datasetIndex) => {
+    ctx.strokeStyle = dataset.color;
+
     dataset.data.forEach((value, index) => {
       const slotCenterX = plotArea.x + slotWidth * index + slotWidth / 2;
       const slotOriginX = slotCenterX - (barWidth * datasets.length) / 2;

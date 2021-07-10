@@ -4,9 +4,11 @@ var __spreadArray = (this && this.__spreadArray) || function (to, from) {
     return to;
 };
 var MAX_BAR_WIDTH = 15;
-var paintSteps = function (ctx, _a) {
-    var _b = _a.areas, valuesStepsArea = _b.bottom, plotArea = _b.plot, gridLines = _a.gridLines, maxValue = _a.maxValue, valueMapperX = _a.valueMapperX;
+var paintSteps = function (ctx, _a, _b) {
+    var _c = _a.areas, valuesStepsArea = _c.bottom, plotArea = _c.plot, maxValue = _a.maxValue, valueMapperX = _a.valueMapperX;
+    var gridLines = _b.gridLines;
     ctx.textBaseline = "alphabetic";
+    ctx.fillStyle = "black";
     ctx.strokeStyle = "grey";
     ctx.lineWidth = 1;
     __spreadArray([], new Array(gridLines + 1)).forEach(function (_, index) {
@@ -16,25 +18,28 @@ var paintSteps = function (ctx, _a) {
         ctx.moveTo(x, plotArea.y);
         ctx.lineTo(x, plotArea.y + plotArea.height);
         ctx.stroke();
-        ctx.fillText(Math.floor(value) + "", x, valuesStepsArea.y + valuesStepsArea.height);
+        ctx.fillText(Math.floor(value).toString(), x, valuesStepsArea.y + valuesStepsArea.height);
     });
 };
-var paintLabels = function (ctx, _a) {
-    var labelsArea = _a.areas.left, labels = _a.labels;
+var paintLabels = function (ctx, _a, _b) {
+    var labelsArea = _a.areas.left;
+    var labels = _b.labels;
     var slotHeight = labelsArea.height / labels.length;
     ctx.textBaseline = "alphabetic";
+    ctx.fillStyle = "black";
     labels.forEach(function (label, index) {
-        var y = labelsArea.x + index * slotHeight + slotHeight / 2;
+        var y = labelsArea.y + index * slotHeight + slotHeight / 2;
         ctx.fillText(label, labelsArea.x, y);
     });
 };
-var paintValues = function (ctx, _a) {
-    var plotArea = _a.areas.plot, labels = _a.labels, datasets = _a.datasets, valueMapperX = _a.valueMapperX;
+var paintValues = function (ctx, _a, _b) {
+    var plotArea = _a.areas.plot, valueMapperX = _a.valueMapperX;
+    var labels = _b.labels, datasets = _b.datasets;
     var slotHeight = plotArea.height / labels.length;
     var barHeight = Math.min(slotHeight / datasets.length, MAX_BAR_WIDTH);
-    ctx.strokeStyle = "black";
     ctx.lineWidth = barHeight;
     datasets.forEach(function (dataset, datasetIndex) {
+        ctx.strokeStyle = dataset.color || "#FF0000";
         dataset.data.forEach(function (value, index) {
             var slotCenterY = plotArea.y + slotHeight * index + slotHeight / 2;
             var slotOriginY = slotCenterY - (barHeight * datasets.length) / 2;

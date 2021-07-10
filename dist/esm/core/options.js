@@ -1,53 +1,48 @@
-var GRIDLINES_LABELS_AREA_WIDTH = 50;
-var SERIES_LABELS_AREA_HEIGHT = 50;
-export var handleOptions = function (area, _a) {
-    var type = _a.type, labels = _a.labels, datasets = _a.datasets, _b = _a.gridLines, gridLines = _b === void 0 ? 3 : _b;
-    var bottomArea = {
-        x: area.x + GRIDLINES_LABELS_AREA_WIDTH,
-        y: area.y + area.height - SERIES_LABELS_AREA_HEIGHT,
-        width: area.width - GRIDLINES_LABELS_AREA_WIDTH,
-        height: SERIES_LABELS_AREA_HEIGHT,
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
     };
-    var leftArea = {
-        x: area.x,
-        y: area.y,
-        width: GRIDLINES_LABELS_AREA_WIDTH,
-        height: area.height - bottomArea.height,
+    return __assign.apply(this, arguments);
+};
+var __rest = (this && this.__rest) || function (s, e) {
+    var t = {};
+    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
+        t[p] = s[p];
+    if (s != null && typeof Object.getOwnPropertySymbols === "function")
+        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
+            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
+                t[p[i]] = s[p[i]];
+        }
+    return t;
+};
+var DATASETS_PALETTE = [
+    "#d9ed92",
+    "#b5e48c",
+    "#99d98c",
+    "#76c893",
+    "#52b69a",
+    "#34a0a4",
+    "#168aad",
+    "#1a759f",
+    "#1e6091",
+    "#184e77",
+];
+export var validateOptions = function (options) {
+    var datasets = options.datasets, _a = options.gridLines, gridLines = _a === void 0 ? 3 : _a, width = options.width, height = options.height;
+    if (!datasets)
+        throw Error("You must provide the datasets!");
+    if (!width)
+        throw Error("You must provide the width!");
+    if (!height)
+        throw Error("You must provide the height!");
+    var validateDataset = function (_a, index) {
+        var color = _a.color, dataset = __rest(_a, ["color"]);
+        return (__assign(__assign({}, dataset), { color: color || DATASETS_PALETTE[index % DATASETS_PALETTE.length] }));
     };
-    var plotArea = {
-        x: leftArea.x + leftArea.width,
-        y: area.y,
-        width: area.width - leftArea.width,
-        height: area.height - bottomArea.height,
-    };
-    var findDatasetMaxValue = function (dataset) {
-        return dataset.data.reduce(function (previous, current) { return (current > previous ? current : previous); }, 0);
-    };
-    var maxValue = datasets.reduce(function (previous, current) {
-        var currentMaxValue = findDatasetMaxValue(current);
-        return currentMaxValue > previous ? currentMaxValue : previous;
-    }, 0);
-    var valueMapperX = function (value) {
-        var valuesRatio = maxValue / plotArea.width;
-        return plotArea.x + value / valuesRatio;
-    };
-    var valueMapperY = function (value) {
-        var valuesRatio = maxValue / plotArea.height;
-        return plotArea.y + plotArea.height - value / valuesRatio;
-    };
-    return {
-        type: type,
-        labels: labels,
-        datasets: datasets,
-        gridLines: gridLines,
-        maxValue: maxValue,
-        areas: {
-            chart: area,
-            bottom: bottomArea,
-            left: leftArea,
-            plot: plotArea,
-        },
-        valueMapperX: valueMapperX,
-        valueMapperY: valueMapperY,
-    };
+    return __assign(__assign({}, options), { datasets: datasets.map(validateDataset), gridLines: gridLines });
 };

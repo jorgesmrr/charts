@@ -1,40 +1,44 @@
-import { ChartArea } from "../models";
+import { ChartArea, ChartValidatedDataset } from "../models";
 
-const LABELS_GAP_X = 20;
-const LABELS_GAP_Y = 7;
-const LABELS_SQUARE_MARGIN_X = 10;
+const LABEL_GAP_X = 20;
+const LABEL_GAP_Y = 7;
+const LABEL_SQUARE_MARGIN_X = 10;
+const LEGEND_BOTTOM_GAP = 20;
 
-type LabelInfo = { label: string; width: number };
+type LabelInfo = { label: string; color: string; width: number };
 type RowInfo = { width: number; labels: LabelInfo[] };
 type RectSizes = { width: number; height: number };
 
-const splitLabelsInRows = (
+const splitDatasetsInRows = (
   ctx: CanvasRenderingContext2D,
   maxRowWidth: number,
   labelRectDimensions: RectSizes,
-  labels: string[]
+  datasets: ChartValidatedDataset[]
 ): RowInfo[] => {
   const rows: RowInfo[] = [];
 
-  const labelsDimensions: LabelInfo[] = labels.map((label) => ({
-    label,
-    width: ctx.measureText(label).width,
-  }));
+  const datasetsWithDimensions: LabelInfo[] = datasets.map(
+    ({ label, color }) => ({
+      label,
+      color,
+      width: ctx.measureText(label).width,
+    })
+  );
 
-  while (labelsDimensions.length) {
+  while (datasetsWithDimensions.length) {
     const row: RowInfo = { width: 0, labels: [] };
 
     while (
-      labelsDimensions.length &&
-      row.width + labelsDimensions[0].width < maxRowWidth
+      datasetsWithDimensions.length &&
+      row.width + datasetsWithDimensions[0].width < maxRowWidth
     ) {
-      row.labels.push(labelsDimensions[0]);
+      row.labels.push(datasetsWithDimensions[0]);
       row.width +=
         labelRectDimensions.width +
-        LABELS_SQUARE_MARGIN_X +
-        labelsDimensions[0].width +
-        LABELS_GAP_X;
-      labelsDimensions.splice(0, 1);
+        LABEL_SQUARE_MARGIN_X +
+        datasetsWithDimensions[0].width +
+        LABEL_GAP_X;
+      datasetsWithDimensions.splice(0, 1);
     }
 
     rows.push(row);
@@ -57,9 +61,10 @@ const paintLabels = (
     const unusedRowWidth = area.width - row.width;
     let labelX = area.x + unusedRowWidth / 2;
 
-    row.labels.forEach((labelInfo) => {
+    row.labels.forEach((label) => {
       const labelY = area.y + rowHeight * rowIndex;
 
+      ctx.fillStyle = label.color;
       ctx.fillRect(
         labelX,
         labelY,
@@ -68,18 +73,19 @@ const paintLabels = (
       );
 
       // center the y coordinate due to the middle baseline set before
+      ctx.fillStyle = "black";
       ctx.fillText(
-        labelInfo.label,
-        labelX + labelRectDimensions.width + LABELS_SQUARE_MARGIN_X,
+        label.label,
+        labelX + labelRectDimensions.width + LABEL_SQUARE_MARGIN_X,
         labelY + labelRectDimensions.height / 2
       );
 
       // increment the origin x coordinate by the sum of this labels content and spacing
       labelX +=
         labelRectDimensions.width +
-        LABELS_SQUARE_MARGIN_X +
-        labelInfo.width +
-        LABELS_GAP_X;
+        LABEL_SQUARE_MARGIN_X +
+        label.width +
+        LABEL_GAP_X;
     });
   });
 };
@@ -89,22 +95,27 @@ export const paintLegendAndGetArea = (
   x: number,
   y: number,
   width: number,
-  labels: string[]
+  datasets: ChartValidatedDataset[]
 ): ChartArea => {
   const approximateTextHeight = ctx.measureText("M").width;
-  const rowHeight = approximateTextHeight + LABELS_GAP_Y;
+  const rowHeight = approximateTextHeight + LABEL_GAP_Y;
   const labelRectDimensions = {
     width: approximateTextHeight * 1.5,
     height: approximateTextHeight,
   };
 
-  const rows = splitLabelsInRows(ctx, width * 0.8, labelRectDimensions, labels);
+  const rows = splitDatasetsInRows(
+    ctx,
+    width * 0.8,
+    labelRectDimensions,
+    datasets
+  );
 
   const area = {
     x,
     y,
     width,
-    height: rowHeight * rows.length,
+    height: rowHeight * rows.length + LEGEND_BOTTOM_GAP,
   };
 
   paintLabels(ctx, area, labelRectDimensions, rowHeight, rows);

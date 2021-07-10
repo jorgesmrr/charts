@@ -17,6 +17,7 @@ export const paintTitleAndGetArea = (
   const centeredX = originX - textDimensions.width / 2;
 
   ctx.textBaseline = "middle";
+  ctx.fillStyle = "black";
   ctx.fillText(title, centeredX, titleArea.y + titleArea.height / 2);
 
   return titleArea;

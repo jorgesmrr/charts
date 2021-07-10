@@ -1,2 +1,2 @@
-import { ChartArea, ChartInternalOptions, ChartOptions } from "./../models";
-export declare const handleOptions: (area: ChartArea, options: ChartOptions) => ChartInternalOptions;
+import { ChartOptions, ChartValidatedOptions } from "./../models";
+export declare const validateOptions: (options: ChartOptions) => ChartValidatedOptions;

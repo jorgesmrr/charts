@@ -12,12 +12,15 @@ const verticalBarsRadio = document.getElementById("vertical-bars-radio");
 
 // TODO const addDataButton = document.getElementById("add-data-btn");
 
+const palette = ["#1d3461", "#1f487e", "#376996", "#6290c8", "#829cbc"];
+
 const datasets = ["A", "B", "C", "D", "E"].map((label, index, { length }) => ({
   label,
+  //color: palette[index],
   data: [
-    (100 * index * 1) / length,
-    (200 * index * 1) / length,
-    (300 * index * 1) / length,
+    10 + 100 * (index / length),
+    10 + 100 * (index / length),
+    10 + 100 * (index / length),
   ],
 }));
 

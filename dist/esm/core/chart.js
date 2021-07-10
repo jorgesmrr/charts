@@ -14,41 +14,82 @@ import { horizontalBarPainter } from "../painters/bar/horizontal.js";
 import { verticalBarPainter } from "../painters/bar/vertical.js";
 import { paintLegendAndGetArea } from "../painters/legend.js";
 import { paintTitleAndGetArea } from "../painters/title.js";
-import { handleOptions } from "./options.js";
+import { validateOptions } from "./options.js";
+var GRIDLINES_LABELS_AREA_WIDTH = 50;
+var DATASETS_LABELS_AREA_HEIGHT = 50;
 var painterByTypeMap = (_a = {},
     _a["horizontal-bars"] = horizontalBarPainter,
     _a["vertical-bars"] = verticalBarPainter,
     _a);
+var getConfiguration = function (area, datasets) {
+    var bottomArea = {
+        x: area.x + GRIDLINES_LABELS_AREA_WIDTH,
+        y: area.y + area.height - DATASETS_LABELS_AREA_HEIGHT,
+        width: area.width - GRIDLINES_LABELS_AREA_WIDTH,
+        height: DATASETS_LABELS_AREA_HEIGHT,
+    };
+    var leftArea = {
+        x: area.x,
+        y: area.y,
+        width: GRIDLINES_LABELS_AREA_WIDTH,
+        height: area.height - bottomArea.height,
+    };
+    var plotArea = {
+        x: leftArea.x + leftArea.width,
+        y: area.y,
+        width: area.width - leftArea.width,
+        height: area.height - bottomArea.height,
+    };
+    var findDatasetMaxValue = function (dataset) {
+        return dataset.data.reduce(function (previous, current) { return (current > previous ? current : previous); }, 0);
+    };
+    var maxValue = datasets.reduce(function (previous, current) {
+        var currentMaxValue = findDatasetMaxValue(current);
+        return currentMaxValue > previous ? currentMaxValue : previous;
+    }, 0);
+    var valueMapperX = function (value) {
+        var valuesRatio = maxValue / plotArea.width;
+        return plotArea.x + value / valuesRatio;
+    };
+    var valueMapperY = function (value) {
+        var valuesRatio = maxValue / plotArea.height;
+        return plotArea.y + plotArea.height - value / valuesRatio;
+    };
+    return {
+        maxValue: maxValue,
+        areas: {
+            chart: area,
+            bottom: bottomArea,
+            left: leftArea,
+            plot: plotArea,
+        },
+        valueMapperX: valueMapperX,
+        valueMapperY: valueMapperY,
+    };
+};
 var update = function (ctx, options) {
+    var validatedOptions = validateOptions(options);
     var chartArea = {
         x: 0,
         y: 0,
-        width: options.width,
-        height: options.height,
+        width: validatedOptions.width,
+        height: validatedOptions.height,
     };
-    var titleArea = paintTitleAndGetArea(ctx, chartArea, options.title);
-    var datasetsLabelsArea = paintLegendAndGetArea(ctx, chartArea.x, chartArea.y + titleArea.height, chartArea.width, options.datasets.map(function (dataset) { return dataset.label; }));
+    var titleArea = paintTitleAndGetArea(ctx, chartArea, validatedOptions.title);
+    var datasetsLabelsArea = paintLegendAndGetArea(ctx, chartArea.x, chartArea.y + titleArea.height, chartArea.width, validatedOptions.datasets);
     var remainingArea = {
         x: chartArea.x,
         y: datasetsLabelsArea.y + datasetsLabelsArea.height,
         width: chartArea.width,
         height: chartArea.height - (titleArea.height + datasetsLabelsArea.height),
     };
-    var painter = painterByTypeMap[options.type];
-    var finalOptions = handleOptions(remainingArea, options);
-    painter.paintSteps(ctx, finalOptions);
-    painter.paintLabels(ctx, finalOptions);
-    painter.paintValues(ctx, finalOptions);
+    var configuration = getConfiguration(remainingArea, validatedOptions.datasets);
+    var painter = painterByTypeMap[validatedOptions.type];
+    painter.paintSteps(ctx, configuration, validatedOptions);
+    painter.paintLabels(ctx, configuration, validatedOptions);
+    painter.paintValues(ctx, configuration, validatedOptions);
 };
 export var paintChart = function (rootElement, options) {
-    if (!options)
-        throw Error("You must provide the options!");
-    if (!options.datasets)
-        throw Error("You must provide the datasets!");
-    if (!options.width)
-        throw Error("You must provide the width!");
-    if (!options.height)
-        throw Error("You must provide the height!");
     rootElement.innerHTML = "<canvas id=\"canvas\" width=\"" + options.width + "\" height=\"" + options.height + "\" />";
     var canvas = document.getElementById("canvas");
     var ctx = canvas.getContext("2d");

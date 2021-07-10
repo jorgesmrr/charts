@@ -7,6 +7,9 @@ export interface ChartDataset {
     data: number[];
     color?: string;
 }
+export interface ChartValidatedDataset extends ChartDataset {
+    color: string;
+}
 export interface ChartOptions {
     type: ChartType;
     title: string;
@@ -16,10 +19,11 @@ export interface ChartOptions {
     height: number;
     gridLines?: number;
 }
-export interface ChartInternalOptions {
-    labels: string[];
-    datasets: ChartDataset[];
+export interface ChartValidatedOptions extends ChartOptions {
+    datasets: ChartValidatedDataset[];
     gridLines: number;
+}
+export interface ChartConfiguration {
     maxValue: number;
     areas: {
         chart: ChartArea;
@@ -36,7 +40,7 @@ export interface ChartArea {
     width: number;
     height: number;
 }
-export declare type ChartPainterTask = (ctx: CanvasRenderingContext2D, options: ChartInternalOptions) => void;
+export declare type ChartPainterTask = (ctx: CanvasRenderingContext2D, configuration: ChartConfiguration, options: ChartValidatedOptions) => void;
 export interface ChartPainter {
     paintSteps: ChartPainterTask;
     paintLabels: ChartPainterTask;
