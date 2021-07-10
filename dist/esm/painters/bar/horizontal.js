@@ -3,7 +3,7 @@ var __spreadArray = (this && this.__spreadArray) || function (to, from) {
         to[j] = from[i];
     return to;
 };
-var MAX_BAR_WIDTH = 15;
+import { MAX_BAR_WIDTH, DATASETS_GAP_X } from "./constants.js";
 var paintSteps = function (ctx, _a, _b) {
     var _c = _a.areas, valuesStepsArea = _c.bottom, plotArea = _c.plot, maxValue = _a.maxValue, valueMapperX = _a.valueMapperX;
     var gridLines = _b.gridLines;
@@ -36,7 +36,7 @@ var paintValues = function (ctx, _a, _b) {
     var plotArea = _a.areas.plot, valueMapperX = _a.valueMapperX;
     var labels = _b.labels, datasets = _b.datasets;
     var slotHeight = plotArea.height / labels.length;
-    var barHeight = Math.min(slotHeight / datasets.length, MAX_BAR_WIDTH);
+    var barHeight = Math.min((slotHeight - DATASETS_GAP_X * 2) / datasets.length, MAX_BAR_WIDTH);
     ctx.lineWidth = barHeight;
     datasets.forEach(function (dataset, datasetIndex) {
         ctx.strokeStyle = dataset.color || "#FF0000";

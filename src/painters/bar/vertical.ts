@@ -1,6 +1,5 @@
-import { ChartPainterTask } from "../../models";
-
-const MAX_BAR_WIDTH = 15;
+import { ChartPainterTask } from "../../models.js";
+import { DATASETS_GAP_X, MAX_BAR_WIDTH } from "./constants.js";
 
 const paintSteps: ChartPainterTask = (
   ctx,
@@ -53,7 +52,10 @@ const paintValues: ChartPainterTask = (
   { labels, datasets }
 ) => {
   const slotWidth = plotArea.width / labels.length;
-  const barWidth = Math.min(slotWidth / datasets.length, MAX_BAR_WIDTH);
+  const barWidth = Math.min(
+    (slotWidth - DATASETS_GAP_X * 2) / datasets.length,
+    MAX_BAR_WIDTH
+  );
 
   ctx.lineWidth = barWidth;
 
