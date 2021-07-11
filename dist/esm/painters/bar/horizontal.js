@@ -5,20 +5,24 @@ var __spreadArray = (this && this.__spreadArray) || function (to, from) {
 };
 import { MAX_BAR_WIDTH, DATASETS_GAP_X } from "./constants.js";
 var paintSteps = function (ctx, _a, _b) {
-    var _c = _a.areas, valuesStepsArea = _c.bottom, plotArea = _c.plot, maxValue = _a.maxValue, valueMapperX = _a.valueMapperX;
+    var _c = _a.areas, valuesStepsArea = _c.bottom, plotArea = _c.plot, minValue = _a.minValue, valuesDistance = _a.valuesDistance, valueMapperX = _a.valueMapperX;
     var gridLines = _b.gridLines;
     ctx.textBaseline = "alphabetic";
     ctx.fillStyle = "black";
     ctx.strokeStyle = "grey";
     ctx.lineWidth = 1;
     __spreadArray([], new Array(gridLines + 1)).forEach(function (_, index) {
-        var value = index * (maxValue / gridLines);
+        var step = index * (valuesDistance / gridLines);
+        var valueTranslation = minValue > 0 ? 0 : minValue;
+        var value = step + valueTranslation;
         var x = valueMapperX(value);
         ctx.beginPath();
         ctx.moveTo(x, plotArea.y);
         ctx.lineTo(x, plotArea.y + plotArea.height);
         ctx.stroke();
-        ctx.fillText(Math.floor(value).toString(), x, valuesStepsArea.y + valuesStepsArea.height);
+        var valueLabel = Math.floor(value).toString();
+        var labelWidth = ctx.measureText(valueLabel).width;
+        ctx.fillText(valueLabel, x - labelWidth / 2, valuesStepsArea.y + valuesStepsArea.height);
     });
 };
 var paintLabels = function (ctx, _a, _b) {
@@ -45,7 +49,7 @@ var paintValues = function (ctx, _a, _b) {
             var slotOriginY = slotCenterY - (barHeight * datasets.length) / 2;
             var barY = slotOriginY + barHeight * datasetIndex + barHeight / 2;
             ctx.beginPath();
-            ctx.moveTo(plotArea.x, barY);
+            ctx.moveTo(valueMapperX(0), barY);
             ctx.lineTo(valueMapperX(value), barY);
             ctx.stroke();
         });

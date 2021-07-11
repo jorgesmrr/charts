@@ -13,7 +13,7 @@ const removeDataButton = document.getElementById("remove-data-btn");
 const palette = ["#1d3461", "#1f487e", "#376996", "#6290c8", "#829cbc"];
 
 const getRandomValue = () => {
-  return Math.floor(Math.random() * 500);
+  return Math.floor(Math.random() * 1000 - 500);
 };
 
 const datasets = [...new Array(5)].map((_, index) => ({

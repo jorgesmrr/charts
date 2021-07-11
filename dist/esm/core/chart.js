@@ -15,58 +15,11 @@ import { verticalBarPainter } from "../painters/bar/vertical.js";
 import { paintLegendAndGetArea } from "../painters/legend.js";
 import { paintTitleAndGetArea } from "../painters/title.js";
 import { validateOptions } from "./options.js";
-var GRIDLINES_LABELS_AREA_WIDTH = 50;
-var DATASETS_LABELS_AREA_HEIGHT = 50;
+import { getConfiguration } from "./configuration.js";
 var painterByTypeMap = (_a = {},
     _a["horizontal-bars"] = horizontalBarPainter,
     _a["vertical-bars"] = verticalBarPainter,
     _a);
-var getConfiguration = function (area, datasets) {
-    var bottomArea = {
-        x: area.x + GRIDLINES_LABELS_AREA_WIDTH,
-        y: area.y + area.height - DATASETS_LABELS_AREA_HEIGHT,
-        width: area.width - GRIDLINES_LABELS_AREA_WIDTH,
-        height: DATASETS_LABELS_AREA_HEIGHT,
-    };
-    var leftArea = {
-        x: area.x,
-        y: area.y,
-        width: GRIDLINES_LABELS_AREA_WIDTH,
-        height: area.height - bottomArea.height,
-    };
-    var plotArea = {
-        x: leftArea.x + leftArea.width,
-        y: area.y,
-        width: area.width - leftArea.width,
-        height: area.height - bottomArea.height,
-    };
-    var findDatasetMaxValue = function (dataset) {
-        return dataset.data.reduce(function (previous, current) { return (current > previous ? current : previous); }, 0);
-    };
-    var maxValue = datasets.reduce(function (previous, current) {
-        var currentMaxValue = findDatasetMaxValue(current);
-        return currentMaxValue > previous ? currentMaxValue : previous;
-    }, 0);
-    var valueMapperX = function (value) {
-        var valuesRatio = maxValue / plotArea.width;
-        return plotArea.x + value / valuesRatio;
-    };
-    var valueMapperY = function (value) {
-        var valuesRatio = maxValue / plotArea.height;
-        return plotArea.y + plotArea.height - value / valuesRatio;
-    };
-    return {
-        maxValue: maxValue,
-        areas: {
-            chart: area,
-            bottom: bottomArea,
-            left: leftArea,
-            plot: plotArea,
-        },
-        valueMapperX: valueMapperX,
-        valueMapperY: valueMapperY,
-    };
-};
 var update = function (ctx, options) {
     var validatedOptions = validateOptions(options);
     var chartArea = {

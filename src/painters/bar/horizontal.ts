@@ -5,7 +5,8 @@ const paintSteps: ChartPainterTask = (
   ctx,
   {
     areas: { bottom: valuesStepsArea, plot: plotArea },
-    maxValue,
+    minValue,
+    valuesDistance,
     valueMapperX,
   },
   { gridLines }
@@ -16,7 +17,10 @@ const paintSteps: ChartPainterTask = (
   ctx.lineWidth = 1;
 
   [...new Array(gridLines + 1)].forEach((_, index) => {
-    const value = index * (maxValue / gridLines);
+    const step = index * (valuesDistance / gridLines);
+
+    const valueTranslation = minValue > 0 ? 0 : minValue;
+    const value = step + valueTranslation;
     const x = valueMapperX(value);
 
     ctx.beginPath();
@@ -24,9 +28,11 @@ const paintSteps: ChartPainterTask = (
     ctx.lineTo(x, plotArea.y + plotArea.height);
     ctx.stroke();
 
+    const valueLabel = Math.floor(value).toString();
+    const labelWidth = ctx.measureText(valueLabel).width;
     ctx.fillText(
-      Math.floor(value).toString(),
-      x,
+      valueLabel,
+      x - labelWidth / 2,
       valuesStepsArea.y + valuesStepsArea.height
     );
   });
@@ -71,7 +77,7 @@ const paintValues: ChartPainterTask = (
       const barY = slotOriginY + barHeight * datasetIndex + barHeight / 2;
 
       ctx.beginPath();
-      ctx.moveTo(plotArea.x, barY);
+      ctx.moveTo(valueMapperX(0), barY);
       ctx.lineTo(valueMapperX(value), barY);
       ctx.stroke();
     });

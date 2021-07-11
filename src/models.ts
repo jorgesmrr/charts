@@ -30,15 +30,17 @@ export interface ChartValidatedOptions extends ChartOptions {
 }
 
 export interface ChartConfiguration {
+  minValue: number;
   maxValue: number;
+  valuesDistance: number;
+  valueMapperX: (value: number) => number;
+  valueMapperY: (value: number) => number;
   areas: {
     chart: ChartArea;
     bottom: ChartArea;
     left: ChartArea;
     plot: ChartArea;
   };
-  valueMapperX: (value: number) => number;
-  valueMapperY: (value: number) => number;
 }
 
 export interface ChartArea {
