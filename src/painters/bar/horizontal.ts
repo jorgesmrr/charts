@@ -9,7 +9,7 @@ const paintSteps: ChartPainterTask = (
     maxValue,
     valueMapperX,
   },
-  { gridLinesGap }
+  { gridLinesDistance }
 ) => {
   ctx.textBaseline = "alphabetic";
   ctx.fillStyle = "black";
@@ -17,16 +17,20 @@ const paintSteps: ChartPainterTask = (
   ctx.lineWidth = 1;
 
   let distanceFromZero =
-    minValue > 0 ? 0 : Math.floor(minValue / gridLinesGap) * gridLinesGap;
+    minValue > 0
+      ? 0
+      : Math.floor(minValue / gridLinesDistance) * gridLinesDistance;
 
   const maxDistance =
-    maxValue > 0 ? Math.ceil(maxValue / gridLinesGap) * gridLinesGap : 0;
+    maxValue > 0
+      ? Math.ceil(maxValue / gridLinesDistance) * gridLinesDistance
+      : 0;
 
   const distances = [];
 
   do {
     distances.push(distanceFromZero);
-    distanceFromZero += gridLinesGap;
+    distanceFromZero += gridLinesDistance;
   } while (distanceFromZero <= maxDistance);
 
   distances.forEach((distanceFromZero, index) => {
@@ -55,7 +59,7 @@ const paintSteps: ChartPainterTask = (
       valuesStepsArea.y + valuesStepsArea.height
     );
 
-    distanceFromZero += gridLinesGap;
+    distanceFromZero += gridLinesDistance;
   });
 };
 

@@ -47,8 +47,8 @@ const getValuesDistance = (
 export const getConfiguration: (
   rootArea: ChartArea,
   datasets: ChartValidatedDataset[],
-  gridLinesGap: number
-) => ChartConfiguration = (area, datasets, gridLinesGap) => {
+  gridLinesDistance: number
+) => ChartConfiguration = (area, datasets, gridLinesDistance) => {
   const bottomArea = {
     x: area.x + GRIDLINES_LABELS_AREA_WIDTH,
     y: area.y + area.height - DATASETS_LABELS_AREA_HEIGHT,
@@ -81,10 +81,12 @@ export const getConfiguration: (
 
   const valueMapperX = (value: number) => {
     const distanceAfterZero =
-      maxValue > 0 ? Math.ceil(maxValue / gridLinesGap) * gridLinesGap : 0;
+      maxValue > 0
+        ? Math.ceil(maxValue / gridLinesDistance) * gridLinesDistance
+        : 0;
     const distanceBeforeZero =
       minValue < 0
-        ? Math.ceil(Math.abs(minValue) / gridLinesGap) * gridLinesGap
+        ? Math.ceil(Math.abs(minValue) / gridLinesDistance) * gridLinesDistance
         : 0;
 
     const valuesRatio =
@@ -98,10 +100,12 @@ export const getConfiguration: (
 
   const valueMapperY = (value: number) => {
     const distanceAfterZero =
-      maxValue > 0 ? Math.ceil(maxValue / gridLinesGap) * gridLinesGap : 0;
+      maxValue > 0
+        ? Math.ceil(maxValue / gridLinesDistance) * gridLinesDistance
+        : 0;
     const distanceBeforeZero =
       minValue < 0
-        ? Math.ceil(Math.abs(minValue) / gridLinesGap) * gridLinesGap
+        ? Math.ceil(Math.abs(minValue) / gridLinesDistance) * gridLinesDistance
         : 0;
 
     const valuesRatio =

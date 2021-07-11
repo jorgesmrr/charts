@@ -14,10 +14,11 @@
   "scripts": {
     "build:esm": "tsc",
     "build:cjs": "tsc --module commonjs --outDir dist/cjs",
-    "build": "yarn build:esm && yarn build:cjs",
+    "build-src": "yarn build:esm && yarn build:cjs",
     "watch": "tsc -w",
     "build-demo": "tsc --project ./demo",
     "watch-demo": "tsc --project ./demo -w",
+    "build": "yarn build-src && yarn build-demo",
     "lint": "eslint . --ext .ts"
   },
   "devDependencies": {

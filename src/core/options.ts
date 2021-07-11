@@ -20,7 +20,7 @@ const DATASETS_PALETTE = [
 
 export const validateOptions: (options: ChartOptions) => ChartValidatedOptions =
   (options) => {
-    const { datasets, gridLinesGap = 3, width, height } = options;
+    const { datasets, gridLinesDistance = 3, width, height } = options;
 
     if (!datasets) throw Error("You must provide the datasets!");
     if (!width) throw Error("You must provide the width!");
@@ -37,6 +37,6 @@ export const validateOptions: (options: ChartOptions) => ChartValidatedOptions =
     return {
       ...options,
       datasets: datasets.map(validateDataset),
-      gridLinesGap,
+      gridLinesDistance,
     };
   };

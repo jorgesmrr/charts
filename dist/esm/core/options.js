@@ -33,7 +33,7 @@ var DATASETS_PALETTE = [
     "#184e77",
 ];
 export var validateOptions = function (options) {
-    var datasets = options.datasets, _a = options.gridLinesGap, gridLinesGap = _a === void 0 ? 3 : _a, width = options.width, height = options.height;
+    var datasets = options.datasets, _a = options.gridLinesDistance, gridLinesDistance = _a === void 0 ? 3 : _a, width = options.width, height = options.height;
     if (!datasets)
         throw Error("You must provide the datasets!");
     if (!width)
@@ -44,5 +44,5 @@ export var validateOptions = function (options) {
         var color = _a.color, dataset = __rest(_a, ["color"]);
         return (__assign(__assign({}, dataset), { color: color || DATASETS_PALETTE[index % DATASETS_PALETTE.length] }));
     };
-    return __assign(__assign({}, options), { datasets: datasets.map(validateDataset), gridLinesGap: gridLinesGap });
+    return __assign(__assign({}, options), { datasets: datasets.map(validateDataset), gridLinesDistance: gridLinesDistance });
 };

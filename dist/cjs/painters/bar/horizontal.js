@@ -1,4 +1,7 @@
-import { MAX_BAR_WIDTH, DATASETS_GAP_X } from "./constants.js";
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.horizontalBarPainter = void 0;
+var constants_js_1 = require("./constants.js");
 var paintSteps = function (ctx, _a, _b) {
     var _c = _a.areas, valuesStepsArea = _c.bottom, plotArea = _c.plot, minValue = _a.minValue, maxValue = _a.maxValue, valueMapperX = _a.valueMapperX;
     var gridLinesDistance = _b.gridLinesDistance;
@@ -54,7 +57,7 @@ var paintValues = function (ctx, _a, _b) {
     var plotArea = _a.areas.plot, valueMapperX = _a.valueMapperX;
     var labels = _b.labels, datasets = _b.datasets;
     var slotHeight = plotArea.height / labels.length;
-    var barHeight = Math.min((slotHeight - DATASETS_GAP_X * 2) / datasets.length, MAX_BAR_WIDTH);
+    var barHeight = Math.min((slotHeight - constants_js_1.DATASETS_GAP_X * 2) / datasets.length, constants_js_1.MAX_BAR_WIDTH);
     ctx.lineWidth = barHeight;
     datasets.forEach(function (dataset, datasetIndex) {
         ctx.strokeStyle = dataset.color || "#FF0000";
@@ -69,7 +72,7 @@ var paintValues = function (ctx, _a, _b) {
         });
     });
 };
-export var horizontalBarPainter = {
+exports.horizontalBarPainter = {
     paintSteps: paintSteps,
     paintLabels: paintLabels,
     paintValues: paintValues,

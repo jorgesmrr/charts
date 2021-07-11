@@ -1,29 +1,40 @@
 export interface Chart {
-    update: (data: ChartData[]) => void;
+    update: (datasets: ChartDataset[]) => void;
 }
 export declare type ChartType = "horizontal-bars" | "vertical-bars";
-export interface ChartData {
+export interface ChartDataset {
     label: string;
-    value: number;
+    data: number[];
+    color?: string;
+}
+export interface ChartValidatedDataset extends ChartDataset {
+    color: string;
 }
 export interface ChartOptions {
     type: ChartType;
-    data: ChartData[];
+    title: string;
+    labels: string[];
+    datasets: ChartDataset[];
     width: number;
     height: number;
-    gridLines?: number;
+    gridLinesDistance?: number;
 }
-export interface ChartInternalOptions extends ChartOptions {
-    gridLines: number;
+export interface ChartValidatedOptions extends ChartOptions {
+    datasets: ChartValidatedDataset[];
+    gridLinesDistance: number;
+}
+export interface ChartConfiguration {
+    minValue: number;
     maxValue: number;
+    valuesDistance: number;
+    valueMapperX: (value: number) => number;
+    valueMapperY: (value: number) => number;
     areas: {
         chart: ChartArea;
         bottom: ChartArea;
         left: ChartArea;
         plot: ChartArea;
     };
-    valueMapperX: (value: number) => number;
-    valueMapperY: (value: number) => number;
 }
 export interface ChartArea {
     x: number;
@@ -31,7 +42,7 @@ export interface ChartArea {
     width: number;
     height: number;
 }
-export declare type ChartPainterTask = (ctx: CanvasRenderingContext2D, options: ChartInternalOptions) => void;
+export declare type ChartPainterTask = (ctx: CanvasRenderingContext2D, configuration: ChartConfiguration, options: ChartValidatedOptions) => void;
 export interface ChartPainter {
     paintSteps: ChartPainterTask;
     paintLabels: ChartPainterTask;

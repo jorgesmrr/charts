@@ -1,3 +1,6 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.getConfiguration = void 0;
 var GRIDLINES_LABELS_AREA_WIDTH = 50;
 var DATASETS_LABELS_AREA_HEIGHT = 50;
 var findDatasetsMinValue = function (datasets) {
@@ -17,7 +20,7 @@ var getValuesDistance = function (valuesHasSameSigns, min, max) {
         ? Math.max(Math.abs(min), Math.abs(max))
         : Math.abs(max) + Math.abs(min);
 };
-export var getConfiguration = function (area, datasets, gridLinesDistance) {
+var getConfiguration = function (area, datasets, gridLinesDistance) {
     var bottomArea = {
         x: area.x + GRIDLINES_LABELS_AREA_WIDTH,
         y: area.y + area.height - DATASETS_LABELS_AREA_HEIGHT,
@@ -80,3 +83,4 @@ export var getConfiguration = function (area, datasets, gridLinesDistance) {
         },
     };
 };
+exports.getConfiguration = getConfiguration;

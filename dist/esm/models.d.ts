@@ -17,11 +17,11 @@ export interface ChartOptions {
     datasets: ChartDataset[];
     width: number;
     height: number;
-    gridLinesGap?: number;
+    gridLinesDistance?: number;
 }
 export interface ChartValidatedOptions extends ChartOptions {
     datasets: ChartValidatedDataset[];
-    gridLinesGap: number;
+    gridLinesDistance: number;
 }
 export interface ChartConfiguration {
     minValue: number;
