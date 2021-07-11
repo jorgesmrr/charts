@@ -16,7 +16,20 @@ const paintSteps: ChartPainterTask = (
   ctx.strokeStyle = "grey";
   ctx.lineWidth = 1;
 
-  const paintGridLine = (distanceFromZero: number) => {
+  let distanceFromZero =
+    minValue > 0 ? 0 : Math.floor(minValue / gridLinesGap) * gridLinesGap;
+
+  const maxDistance =
+    maxValue > 0 ? Math.ceil(maxValue / gridLinesGap) * gridLinesGap : 0;
+
+  const distances = [];
+
+  do {
+    distances.push(distanceFromZero);
+    distanceFromZero += gridLinesGap;
+  } while (distanceFromZero <= maxDistance);
+
+  distances.forEach((distanceFromZero, index) => {
     const x = valueMapperX(distanceFromZero);
 
     ctx.beginPath();
@@ -26,24 +39,24 @@ const paintSteps: ChartPainterTask = (
 
     const valueLabel = Math.floor(distanceFromZero).toString();
     const labelWidth = ctx.measureText(valueLabel).width;
+
+    let textTranslationX;
+    if (index === 0) {
+      textTranslationX = 0;
+    } else if (index === distances.length - 1) {
+      textTranslationX = -labelWidth;
+    } else {
+      textTranslationX = -labelWidth / 2;
+    }
+
     ctx.fillText(
       valueLabel,
-      x - labelWidth / 2,
+      x + textTranslationX,
       valuesStepsArea.y + valuesStepsArea.height
     );
-  };
 
-  let distanceFromZero = 0;
-  do {
-    paintGridLine(distanceFromZero);
     distanceFromZero += gridLinesGap;
-  } while (distanceFromZero - gridLinesGap <= maxValue);
-
-  distanceFromZero = -gridLinesGap;
-  while (distanceFromZero + gridLinesGap >= minValue) {
-    paintGridLine(distanceFromZero);
-    distanceFromZero -= gridLinesGap;
-  }
+  });
 };
 
 const paintLabels: ChartPainterTask = (

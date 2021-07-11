@@ -6,7 +6,14 @@ var paintSteps = function (ctx, _a, _b) {
     ctx.fillStyle = "black";
     ctx.strokeStyle = "grey";
     ctx.lineWidth = 1;
-    var paintGridLine = function (distanceFromZero) {
+    var distanceFromZero = minValue > 0 ? 0 : Math.floor(minValue / gridLinesGap) * gridLinesGap;
+    var maxDistance = maxValue > 0 ? Math.ceil(maxValue / gridLinesGap) * gridLinesGap : 0;
+    var distances = [];
+    do {
+        distances.push(distanceFromZero);
+        distanceFromZero += gridLinesGap;
+    } while (distanceFromZero <= maxDistance);
+    distances.forEach(function (distanceFromZero, index) {
         var x = valueMapperX(distanceFromZero);
         ctx.beginPath();
         ctx.moveTo(x, plotArea.y);
@@ -14,18 +21,19 @@ var paintSteps = function (ctx, _a, _b) {
         ctx.stroke();
         var valueLabel = Math.floor(distanceFromZero).toString();
         var labelWidth = ctx.measureText(valueLabel).width;
-        ctx.fillText(valueLabel, x - labelWidth / 2, valuesStepsArea.y + valuesStepsArea.height);
-    };
-    var distanceFromZero = 0;
-    do {
-        paintGridLine(distanceFromZero);
+        var textTranslationX;
+        if (index === 0) {
+            textTranslationX = 0;
+        }
+        else if (index === distances.length - 1) {
+            textTranslationX = -labelWidth;
+        }
+        else {
+            textTranslationX = -labelWidth / 2;
+        }
+        ctx.fillText(valueLabel, x + textTranslationX, valuesStepsArea.y + valuesStepsArea.height);
         distanceFromZero += gridLinesGap;
-    } while (distanceFromZero - gridLinesGap <= maxValue);
-    distanceFromZero = -gridLinesGap;
-    while (distanceFromZero + gridLinesGap >= minValue) {
-        paintGridLine(distanceFromZero);
-        distanceFromZero -= gridLinesGap;
-    }
+    });
 };
 var paintLabels = function (ctx, _a, _b) {
     var labelsArea = _a.areas.left;
