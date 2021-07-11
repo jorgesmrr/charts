@@ -1,29 +1,31 @@
-var __spreadArray = (this && this.__spreadArray) || function (to, from) {
-    for (var i = 0, il = from.length, j = to.length; i < il; i++, j++)
-        to[j] = from[i];
-    return to;
-};
 import { MAX_BAR_WIDTH, DATASETS_GAP_X } from "./constants.js";
 var paintSteps = function (ctx, _a, _b) {
-    var _c = _a.areas, valuesStepsArea = _c.bottom, plotArea = _c.plot, minValue = _a.minValue, valuesDistance = _a.valuesDistance, valueMapperX = _a.valueMapperX;
-    var gridLines = _b.gridLines;
+    var _c = _a.areas, valuesStepsArea = _c.bottom, plotArea = _c.plot, minValue = _a.minValue, maxValue = _a.maxValue, valueMapperX = _a.valueMapperX;
+    var gridLinesGap = _b.gridLinesGap;
     ctx.textBaseline = "alphabetic";
     ctx.fillStyle = "black";
     ctx.strokeStyle = "grey";
     ctx.lineWidth = 1;
-    __spreadArray([], new Array(gridLines + 1)).forEach(function (_, index) {
-        var step = index * (valuesDistance / gridLines);
-        var valueTranslation = minValue > 0 ? 0 : minValue;
-        var value = step + valueTranslation;
-        var x = valueMapperX(value);
+    var paintGridLine = function (distanceFromZero) {
+        var x = valueMapperX(distanceFromZero);
         ctx.beginPath();
         ctx.moveTo(x, plotArea.y);
         ctx.lineTo(x, plotArea.y + plotArea.height);
         ctx.stroke();
-        var valueLabel = Math.floor(value).toString();
+        var valueLabel = Math.floor(distanceFromZero).toString();
         var labelWidth = ctx.measureText(valueLabel).width;
         ctx.fillText(valueLabel, x - labelWidth / 2, valuesStepsArea.y + valuesStepsArea.height);
-    });
+    };
+    var distanceFromZero = 0;
+    do {
+        paintGridLine(distanceFromZero);
+        distanceFromZero += gridLinesGap;
+    } while (distanceFromZero - gridLinesGap <= maxValue);
+    distanceFromZero = -gridLinesGap;
+    while (distanceFromZero + gridLinesGap >= minValue) {
+        paintGridLine(distanceFromZero);
+        distanceFromZero -= gridLinesGap;
+    }
 };
 var paintLabels = function (ctx, _a, _b) {
     var labelsArea = _a.areas.left;

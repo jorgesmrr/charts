@@ -30,6 +30,7 @@ const showChart = (type: ChartType) =>
     datasets,
     width: 700,
     height: 500,
+    gridLinesGap: 200,
   }));
 
 const getChartTypeChangeHandler =

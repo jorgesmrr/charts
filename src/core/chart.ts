@@ -43,7 +43,8 @@ const update = (ctx: CanvasRenderingContext2D, options: ChartOptions) => {
 
   const configuration = getConfiguration(
     remainingArea,
-    validatedOptions.datasets
+    validatedOptions.datasets,
+    validatedOptions.gridLinesGap
   );
 
   const painter = painterByTypeMap[validatedOptions.type];

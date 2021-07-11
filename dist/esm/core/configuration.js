@@ -17,7 +17,7 @@ var getValuesDistance = function (valuesHasSameSigns, min, max) {
         ? Math.max(Math.abs(min), Math.abs(max))
         : Math.abs(max) + Math.abs(min);
 };
-export var getConfiguration = function (area, datasets) {
+export var getConfiguration = function (area, datasets, gridLinesGap) {
     var bottomArea = {
         x: area.x + GRIDLINES_LABELS_AREA_WIDTH,
         y: area.y + area.height - DATASETS_LABELS_AREA_HEIGHT,
@@ -41,18 +41,26 @@ export var getConfiguration = function (area, datasets) {
     var valuesHasSameSigns = maxValue * minValue > 0;
     var valuesDistance = getValuesDistance(valuesHasSameSigns, minValue, maxValue);
     var valueMapperX = function (value) {
-        var valuesRatio = valuesDistance / plotArea.width;
-        var baseY = plotArea.x;
-        var valueY = value / valuesRatio;
-        var translationY = minValue > 0 ? 0 : minValue / valuesRatio;
-        return baseY + valueY - translationY;
+        var distanceAfterZero = maxValue > 0 ? Math.ceil(maxValue / gridLinesGap) * gridLinesGap : 0;
+        var distanceBeforeZero = minValue < 0
+            ? Math.ceil(Math.abs(minValue) / gridLinesGap) * gridLinesGap
+            : 0;
+        var valuesRatio = (distanceBeforeZero + distanceAfterZero) / plotArea.width;
+        var baseX = plotArea.x;
+        var valueX = value / valuesRatio;
+        var translationX = distanceBeforeZero > 0 ? distanceBeforeZero / valuesRatio : 0;
+        return baseX + valueX + translationX;
     };
     var valueMapperY = function (value) {
-        var valuesRatio = valuesDistance / plotArea.height;
+        var distanceAfterZero = maxValue > 0 ? Math.ceil(maxValue / gridLinesGap) * gridLinesGap : 0;
+        var distanceBeforeZero = minValue < 0
+            ? Math.ceil(Math.abs(minValue) / gridLinesGap) * gridLinesGap
+            : 0;
+        var valuesRatio = (distanceBeforeZero + distanceAfterZero) / plotArea.height;
         var baseY = plotArea.y + plotArea.height;
         var valueY = value / valuesRatio;
-        var translationY = minValue > 0 ? 0 : minValue / valuesRatio;
-        return baseY - valueY + translationY;
+        var translationY = distanceBeforeZero > 0 ? distanceBeforeZero / valuesRatio : 0;
+        return baseY - valueY - translationY;
     };
     return {
         minValue: minValue,

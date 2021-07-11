@@ -6,30 +6,38 @@ const paintSteps: ChartPainterTask = (
   {
     areas: { left: valuesStepsArea, plot: valuesArea },
     minValue,
-    valuesDistance,
+    maxValue,
     valueMapperY,
   },
-  { gridLines }
+  { gridLinesGap }
 ) => {
   ctx.textBaseline = "alphabetic";
   ctx.fillStyle = "black";
   ctx.strokeStyle = "grey";
   ctx.lineWidth = 1;
 
-  [...new Array(gridLines + 1)].forEach((_, index) => {
-    const step = index * (valuesDistance / gridLines);
-
-    const valueTranslation = minValue > 0 ? 0 : minValue;
-    const value = step + valueTranslation;
-    const y = valueMapperY(value);
+  const paintGridLine = (distanceFromZero: number) => {
+    const y = valueMapperY(distanceFromZero);
 
     ctx.beginPath();
     ctx.moveTo(valuesArea.x, y);
     ctx.lineTo(valuesArea.x + valuesArea.width, y);
     ctx.stroke();
 
-    ctx.fillText(Math.floor(value).toString(), valuesStepsArea.x, y);
-  });
+    ctx.fillText(Math.floor(distanceFromZero).toString(), valuesStepsArea.x, y);
+  };
+
+  let distanceFromZero = 0;
+  do {
+    paintGridLine(distanceFromZero);
+    distanceFromZero += gridLinesGap;
+  } while (distanceFromZero - gridLinesGap <= maxValue);
+
+  distanceFromZero = -gridLinesGap;
+  while (distanceFromZero + gridLinesGap >= minValue) {
+    paintGridLine(distanceFromZero);
+    distanceFromZero -= gridLinesGap;
+  }
 };
 
 const paintLabels: ChartPainterTask = (

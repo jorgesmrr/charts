@@ -1,27 +1,29 @@
-var __spreadArray = (this && this.__spreadArray) || function (to, from) {
-    for (var i = 0, il = from.length, j = to.length; i < il; i++, j++)
-        to[j] = from[i];
-    return to;
-};
 import { DATASETS_GAP_X, MAX_BAR_WIDTH } from "./constants.js";
 var paintSteps = function (ctx, _a, _b) {
-    var _c = _a.areas, valuesStepsArea = _c.left, valuesArea = _c.plot, minValue = _a.minValue, valuesDistance = _a.valuesDistance, valueMapperY = _a.valueMapperY;
-    var gridLines = _b.gridLines;
+    var _c = _a.areas, valuesStepsArea = _c.left, valuesArea = _c.plot, minValue = _a.minValue, maxValue = _a.maxValue, valueMapperY = _a.valueMapperY;
+    var gridLinesGap = _b.gridLinesGap;
     ctx.textBaseline = "alphabetic";
     ctx.fillStyle = "black";
     ctx.strokeStyle = "grey";
     ctx.lineWidth = 1;
-    __spreadArray([], new Array(gridLines + 1)).forEach(function (_, index) {
-        var step = index * (valuesDistance / gridLines);
-        var valueTranslation = minValue > 0 ? 0 : minValue;
-        var value = step + valueTranslation;
-        var y = valueMapperY(value);
+    var paintGridLine = function (distanceFromZero) {
+        var y = valueMapperY(distanceFromZero);
         ctx.beginPath();
         ctx.moveTo(valuesArea.x, y);
         ctx.lineTo(valuesArea.x + valuesArea.width, y);
         ctx.stroke();
-        ctx.fillText(Math.floor(value).toString(), valuesStepsArea.x, y);
-    });
+        ctx.fillText(Math.floor(distanceFromZero).toString(), valuesStepsArea.x, y);
+    };
+    var distanceFromZero = 0;
+    do {
+        paintGridLine(distanceFromZero);
+        distanceFromZero += gridLinesGap;
+    } while (distanceFromZero - gridLinesGap <= maxValue);
+    distanceFromZero = -gridLinesGap;
+    while (distanceFromZero + gridLinesGap >= minValue) {
+        paintGridLine(distanceFromZero);
+        distanceFromZero -= gridLinesGap;
+    }
 };
 var paintLabels = function (ctx, _a, _b) {
     var labelsArea = _a.areas.bottom;

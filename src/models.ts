@@ -21,12 +21,12 @@ export interface ChartOptions {
   datasets: ChartDataset[];
   width: number;
   height: number;
-  gridLines?: number;
+  gridLinesGap?: number;
 }
 
 export interface ChartValidatedOptions extends ChartOptions {
   datasets: ChartValidatedDataset[];
-  gridLines: number;
+  gridLinesGap: number;
 }
 
 export interface ChartConfiguration {

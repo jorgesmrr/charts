@@ -36,7 +36,7 @@ var update = function (ctx, options) {
         width: chartArea.width,
         height: chartArea.height - (titleArea.height + datasetsLabelsArea.height),
     };
-    var configuration = getConfiguration(remainingArea, validatedOptions.datasets);
+    var configuration = getConfiguration(remainingArea, validatedOptions.datasets, validatedOptions.gridLinesGap);
     var painter = painterByTypeMap[validatedOptions.type];
     painter.paintSteps(ctx, configuration, validatedOptions);
     painter.paintLabels(ctx, configuration, validatedOptions);

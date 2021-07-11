@@ -46,8 +46,9 @@ const getValuesDistance = (
 
 export const getConfiguration: (
   rootArea: ChartArea,
-  datasets: ChartValidatedDataset[]
-) => ChartConfiguration = (area, datasets) => {
+  datasets: ChartValidatedDataset[],
+  gridLinesGap: number
+) => ChartConfiguration = (area, datasets, gridLinesGap) => {
   const bottomArea = {
     x: area.x + GRIDLINES_LABELS_AREA_WIDTH,
     y: area.y + area.height - DATASETS_LABELS_AREA_HEIGHT,
@@ -79,19 +80,37 @@ export const getConfiguration: (
   );
 
   const valueMapperX = (value: number) => {
-    const valuesRatio = valuesDistance / plotArea.width;
-    const baseY = plotArea.x;
-    const valueY = value / valuesRatio;
-    const translationY = minValue > 0 ? 0 : minValue / valuesRatio;
-    return baseY + valueY - translationY;
+    const distanceAfterZero =
+      maxValue > 0 ? Math.ceil(maxValue / gridLinesGap) * gridLinesGap : 0;
+    const distanceBeforeZero =
+      minValue < 0
+        ? Math.ceil(Math.abs(minValue) / gridLinesGap) * gridLinesGap
+        : 0;
+
+    const valuesRatio =
+      (distanceBeforeZero + distanceAfterZero) / plotArea.width;
+    const baseX = plotArea.x;
+    const valueX = value / valuesRatio;
+    const translationX =
+      distanceBeforeZero > 0 ? distanceBeforeZero / valuesRatio : 0;
+    return baseX + valueX + translationX;
   };
 
   const valueMapperY = (value: number) => {
-    const valuesRatio = valuesDistance / plotArea.height;
+    const distanceAfterZero =
+      maxValue > 0 ? Math.ceil(maxValue / gridLinesGap) * gridLinesGap : 0;
+    const distanceBeforeZero =
+      minValue < 0
+        ? Math.ceil(Math.abs(minValue) / gridLinesGap) * gridLinesGap
+        : 0;
+
+    const valuesRatio =
+      (distanceBeforeZero + distanceAfterZero) / plotArea.height;
     const baseY = plotArea.y + plotArea.height;
     const valueY = value / valuesRatio;
-    const translationY = minValue > 0 ? 0 : minValue / valuesRatio;
-    return baseY - valueY + translationY;
+    const translationY =
+      distanceBeforeZero > 0 ? distanceBeforeZero / valuesRatio : 0;
+    return baseY - valueY - translationY;
   };
 
   return {
