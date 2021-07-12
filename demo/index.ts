@@ -1,4 +1,4 @@
-import { Chart, paintChart, ChartType } from "./../dist/esm/index.js";
+import { Chart, paintChart, ChartType } from "./lib/index.js";
 
 let chart: Chart;
 

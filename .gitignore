@@ -11,3 +11,4 @@ yarn-error.log*
 
 # build files
 /demo/*.js
+/demo/lib/*
