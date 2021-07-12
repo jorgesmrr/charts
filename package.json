@@ -15,9 +15,9 @@
     "build:esm": "tsc",
     "build:cjs": "tsc --module commonjs --outDir dist/cjs",
     "build": "yarn build:esm && yarn build:cjs",
-    "watch": "tsc -w",
     "build-demo": "tsc --outDir demo/lib && tsc --project ./demo",
     "watch-demo": "tsc --project ./demo -w",
+    "watch-demo-lib": "tsc --outDir demo/lib -w",
     "lint": "eslint . --ext .ts"
   },
   "devDependencies": {

@@ -28,13 +28,15 @@ var update = function (ctx, options) {
         width: validatedOptions.width,
         height: validatedOptions.height,
     };
-    var titleArea = paintTitleAndGetArea(ctx, chartArea, validatedOptions.title);
-    var datasetsLabelsArea = paintLegendAndGetArea(ctx, chartArea.x, chartArea.y + titleArea.height, chartArea.width, validatedOptions.datasets);
+    var titleArea = validatedOptions.title
+        ? paintTitleAndGetArea(ctx, chartArea, validatedOptions.title)
+        : null;
+    var datasetsLabelsArea = paintLegendAndGetArea(ctx, chartArea.x, chartArea.y + ((titleArea === null || titleArea === void 0 ? void 0 : titleArea.height) || 0), chartArea.width, validatedOptions.datasets);
     var remainingArea = {
         x: chartArea.x,
         y: datasetsLabelsArea.y + datasetsLabelsArea.height,
         width: chartArea.width,
-        height: chartArea.height - (titleArea.height + datasetsLabelsArea.height),
+        height: chartArea.height - (((titleArea === null || titleArea === void 0 ? void 0 : titleArea.height) || 0) + datasetsLabelsArea.height),
     };
     var configuration = getConfiguration(remainingArea, validatedOptions.datasets, validatedOptions.gridLinesDistance);
     var painter = painterByTypeMap[validatedOptions.type];

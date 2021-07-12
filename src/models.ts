@@ -16,7 +16,7 @@ export interface ChartValidatedDataset extends ChartDataset {
 
 export interface ChartOptions {
   type: ChartType;
-  title: string;
+  title?: string;
   labels: string[];
   datasets: ChartDataset[];
   width: number;

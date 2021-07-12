@@ -21,15 +21,13 @@ const update = (ctx: CanvasRenderingContext2D, options: ChartOptions) => {
     height: validatedOptions.height,
   };
 
-  const titleArea = paintTitleAndGetArea(
-    ctx,
-    chartArea,
-    validatedOptions.title
-  );
+  const titleArea = validatedOptions.title
+    ? paintTitleAndGetArea(ctx, chartArea, validatedOptions.title)
+    : null;
   const datasetsLabelsArea = paintLegendAndGetArea(
     ctx,
     chartArea.x,
-    chartArea.y + titleArea.height,
+    chartArea.y + (titleArea?.height || 0),
     chartArea.width,
     validatedOptions.datasets
   );
@@ -38,7 +36,8 @@ const update = (ctx: CanvasRenderingContext2D, options: ChartOptions) => {
     x: chartArea.x,
     y: datasetsLabelsArea.y + datasetsLabelsArea.height,
     width: chartArea.width,
-    height: chartArea.height - (titleArea.height + datasetsLabelsArea.height),
+    height:
+      chartArea.height - ((titleArea?.height || 0) + datasetsLabelsArea.height),
   };
 
   const configuration = getConfiguration(
