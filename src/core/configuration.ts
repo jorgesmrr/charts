@@ -10,7 +10,7 @@ const DATASETS_LABELS_AREA_HEIGHT = 50;
 
 const findDatasetsMinValue = (datasets: ChartDataset[]) => {
   const findInDataset = (dataset: ChartDataset) =>
-    dataset.data.reduce(
+    dataset.values.reduce(
       (previous, current) => Math.min(previous, current),
       Infinity
     );
@@ -23,7 +23,7 @@ const findDatasetsMinValue = (datasets: ChartDataset[]) => {
 
 const findDatasetsMaxValue = (datasets: ChartDataset[]) => {
   const findInDataset = (dataset: ChartDataset) =>
-    dataset.data.reduce(
+    dataset.values.reduce(
       (previous, current) => Math.max(previous, current),
       -Infinity
     );

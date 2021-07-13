@@ -66,7 +66,7 @@ const paintSteps: ChartPainterTask = (
 const paintLabels: ChartPainterTask = (
   ctx,
   { areas: { left: labelsArea } },
-  { labels }
+  { data: { labels } }
 ) => {
   const slotHeight = labelsArea.height / labels.length;
 
@@ -82,7 +82,7 @@ const paintLabels: ChartPainterTask = (
 const paintValues: ChartPainterTask = (
   ctx,
   { areas: { plot: plotArea }, valueMapperX },
-  { labels, datasets }
+  { data: { labels, datasets } }
 ) => {
   const slotHeight = plotArea.height / labels.length;
   const barHeight = Math.min(
@@ -95,7 +95,7 @@ const paintValues: ChartPainterTask = (
   datasets.forEach((dataset, datasetIndex) => {
     ctx.strokeStyle = dataset.color || "#FF0000";
 
-    dataset.data.forEach((value, index) => {
+    dataset.values.forEach((value, index) => {
       const slotCenterY = plotArea.y + slotHeight * index + slotHeight / 2;
       const slotOriginY = slotCenterY - (barHeight * datasets.length) / 2;
 

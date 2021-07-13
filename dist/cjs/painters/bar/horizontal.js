@@ -44,7 +44,7 @@ var paintSteps = function (ctx, _a, _b) {
 };
 var paintLabels = function (ctx, _a, _b) {
     var labelsArea = _a.areas.left;
-    var labels = _b.labels;
+    var labels = _b.data.labels;
     var slotHeight = labelsArea.height / labels.length;
     ctx.textBaseline = "alphabetic";
     ctx.fillStyle = "black";
@@ -55,13 +55,13 @@ var paintLabels = function (ctx, _a, _b) {
 };
 var paintValues = function (ctx, _a, _b) {
     var plotArea = _a.areas.plot, valueMapperX = _a.valueMapperX;
-    var labels = _b.labels, datasets = _b.datasets;
+    var _c = _b.data, labels = _c.labels, datasets = _c.datasets;
     var slotHeight = plotArea.height / labels.length;
     var barHeight = Math.min((slotHeight - constants_js_1.DATASETS_GAP_X * 2) / datasets.length, constants_js_1.MAX_BAR_WIDTH);
     ctx.lineWidth = barHeight;
     datasets.forEach(function (dataset, datasetIndex) {
         ctx.strokeStyle = dataset.color || "#FF0000";
-        dataset.data.forEach(function (value, index) {
+        dataset.values.forEach(function (value, index) {
             var slotCenterY = plotArea.y + slotHeight * index + slotHeight / 2;
             var slotOriginY = slotCenterY - (barHeight * datasets.length) / 2;
             var barY = slotOriginY + barHeight * datasetIndex + barHeight / 2;

@@ -5,13 +5,13 @@ var GRIDLINES_LABELS_AREA_WIDTH = 50;
 var DATASETS_LABELS_AREA_HEIGHT = 50;
 var findDatasetsMinValue = function (datasets) {
     var findInDataset = function (dataset) {
-        return dataset.data.reduce(function (previous, current) { return Math.min(previous, current); }, Infinity);
+        return dataset.values.reduce(function (previous, current) { return Math.min(previous, current); }, Infinity);
     };
     return datasets.reduce(function (previous, current) { return Math.min(previous, findInDataset(current)); }, Infinity);
 };
 var findDatasetsMaxValue = function (datasets) {
     var findInDataset = function (dataset) {
-        return dataset.data.reduce(function (previous, current) { return Math.max(previous, current); }, -Infinity);
+        return dataset.values.reduce(function (previous, current) { return Math.max(previous, current); }, -Infinity);
     };
     return datasets.reduce(function (previous, current) { return Math.max(previous, findInDataset(current)); }, -Infinity);
 };

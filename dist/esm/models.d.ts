@@ -4,23 +4,29 @@ export interface Chart {
 export declare type ChartType = "horizontal-bars" | "vertical-bars";
 export interface ChartDataset {
     label: string;
-    data: number[];
+    values: number[];
     color?: string;
 }
 export interface ChartValidatedDataset extends ChartDataset {
     color: string;
 }
+interface ChartData {
+    labels: string[];
+    datasets: ChartDataset[];
+}
+interface ChartValidatedData extends ChartData {
+    datasets: ChartValidatedDataset[];
+}
 export interface ChartOptions {
     type: ChartType;
     title?: string;
-    labels: string[];
-    datasets: ChartDataset[];
+    data: ChartData;
     width: number;
     height: number;
     gridLinesDistance?: number;
 }
 export interface ChartValidatedOptions extends ChartOptions {
-    datasets: ChartValidatedDataset[];
+    data: ChartValidatedData;
     gridLinesDistance: number;
 }
 export interface ChartConfiguration {
@@ -48,3 +54,4 @@ export interface ChartPainter {
     paintLabels: ChartPainterTask;
     paintValues: ChartPainterTask;
 }
+export {};

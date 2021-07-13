@@ -19,15 +19,17 @@ const getRandomValue = () => {
 const datasets = [...new Array(5)].map((_, index) => ({
   label: String.fromCharCode(65 + index),
   color: palette[index % palette.length],
-  data: [getRandomValue(), getRandomValue(), getRandomValue()],
+  values: [getRandomValue(), getRandomValue(), getRandomValue()],
 }));
 
 const showChart = (type: ChartType) =>
   (chart = paintChart(root, {
     type,
     title: "Chart",
-    labels: ["1", "2", "3"],
-    datasets,
+    data: {
+      labels: ["1", "2", "3"],
+      datasets,
+    },
     width: 700,
     height: 500,
     gridLinesDistance: 200,
@@ -73,7 +75,7 @@ const addDataset = () => {
   datasets.push({
     label: getNewLabel(),
     color: palette[datasets.length % palette.length],
-    data: [getRandomValue(), getRandomValue(), getRandomValue()],
+    values: [getRandomValue(), getRandomValue(), getRandomValue()],
   });
   chart.update(datasets);
 };

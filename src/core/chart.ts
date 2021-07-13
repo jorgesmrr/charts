@@ -29,7 +29,7 @@ const update = (ctx: CanvasRenderingContext2D, options: ChartOptions) => {
     chartArea.x,
     chartArea.y + (titleArea?.height || 0),
     chartArea.width,
-    validatedOptions.datasets
+    validatedOptions.data.datasets
   );
 
   const remainingArea = {
@@ -42,7 +42,7 @@ const update = (ctx: CanvasRenderingContext2D, options: ChartOptions) => {
 
   const configuration = getConfiguration(
     remainingArea,
-    validatedOptions.datasets,
+    validatedOptions.data.datasets,
     validatedOptions.gridLinesDistance
   );
 
@@ -66,7 +66,7 @@ export const paintChart: (
 
   const wrappedUpdate = (datasets: ChartDataset[]) => {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    update(ctx, { ...options, datasets });
+    update(ctx, { ...options, data: { ...options.data, datasets } });
   };
 
   return {
